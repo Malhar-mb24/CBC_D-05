@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Disease Detector - Kissan Sarthi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.19.0/dist/tf.min.js"></script>
+    <!-- Load the model -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-brand">
+                <h1>किसान सारथी</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="details.html">Details</a>
+                <a href="parameters.html">Parameters</a>
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Crop Disease Detector</h1>
+            <p>Upload a leaf image to detect diseases</p>
+            
+            <div class="upload-section">
+                <input type="file" id="imageUpload" accept="image/*">
+                <div id="imagePreview"></div>
+            </div>
+
+            <div class="prediction-section">
+                <h3>Prediction:</h3>
+                <div id="predictionResult"></div>
+                <div id="confidenceScore"></div>
+                <div id="recommendation"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Kissan Sarthi. All rights reserved.</p>
+    </footer>
+
+    <script src="js/disease-detector.js"></script>
+</body>
+</html>
