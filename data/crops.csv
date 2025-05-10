@@ -1,0 +1,6 @@
+crop_name,growth_period,water_requirement,soil_type,optimal_temperature
+Rice,120,High,Clay,25-35
+Wheat,90,Medium,Loam,20-25
+Maize,100,Medium,Loam,25-30
+Soybean,110,Medium,Loam,20-30
+Cotton,180,High,Clay,25-35 

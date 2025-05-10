@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Kissan Sarthi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dataProcessor.js"></script>
+    <script src="js/visualizationHandler.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="details.html">Details</a>
+            <a href="parameters.html">Parameters</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+        </nav>
+        <div id="google_translate_element"></div>
+    </header>
+
+    <main class="dashboard-container">
+        <h1>Farmer Dashboard</h1>
+
+        <!-- Crop Analytics Section -->
+        <section class="chart-section">
+            <h2>Crop Analytics</h2>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Yield Estimation</h3>
+                    <canvas id="yield-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Crop Distribution</h3>
+                    <canvas id="crop-distribution-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Irrigation Analytics Section -->
+        <section class="chart-section">
+            <h2>Irrigation Analytics</h2>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Water Requirements</h3>
+                    <canvas id="water-requirements-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Irrigation Efficiency</h3>
+                    <canvas id="irrigation-efficiency-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Growth Enhancement Section -->
+        <section class="chart-section">
+            <h2>Growth Enhancement</h2>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Growth Impact Analysis</h3>
+                    <canvas id="growth-impact-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Resource Utilization</h3>
+                    <canvas id="resource-utilization-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Analysis Section -->
+        <section class="chart-section">
+            <h2>Market Analysis</h2>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Market Trends</h3>
+                    <canvas id="market-trends-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Price Predictions</h3>
+                    <canvas id="price-predictions-chart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Kissan Sarthi. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize visualizations when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.visualizationHandler.initializeVisualizations();
+        });
+
+        // Add Google Translate script
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,mr,gu,bn,ta,te,ml,kn,pa,ur',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html> 

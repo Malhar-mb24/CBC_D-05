@@ -1,0 +1,22 @@
+{
+    "api_endpoints": {
+        "weather": "https://api.weather.com/v1/",
+        "market": "https://api.market.com/v1/",
+        "soil": "https://api.soil.com/v1/"
+    },
+    "api_keys": {
+        "weather": "YOUR_WEATHER_API_KEY",
+        "market": "YOUR_MARKET_API_KEY",
+        "soil": "YOUR_SOIL_API_KEY"
+    },
+    "update_frequency": {
+        "weather": 3600,
+        "market": 86400,
+        "soil": 604800
+    },
+    "data_retention": {
+        "weather": 30,
+        "market": 365,
+        "soil": 180
+    }
+} 

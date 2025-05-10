@@ -1,0 +1,6 @@
+crop,current_price,price_trend,market_demand,season
+Rice,2500,Increasing,High,Rabi
+Wheat,2200,Stable,High,Rabi
+Maize,1800,Decreasing,Medium,Kharif
+Soybean,3200,Increasing,High,Kharif
+Cotton,5500,Stable,Medium,Kharif 

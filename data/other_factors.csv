@@ -1,0 +1,6 @@
+factor,impact_level,control_method,monitoring_frequency
+Pests,High,IPM,Weekly
+Diseases,High,Preventive,Weekly
+Weeds,Medium,Herbicides,Bi-weekly
+Soil pH,High,Lime/Sulfur,Monthly
+Weather,High,Monitoring,Daily 

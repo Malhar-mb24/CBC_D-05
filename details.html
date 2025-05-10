@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Details - Kissan Sarthi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-brand">
+                <h1>किसान सारथी</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="details.html" class="active">Details</a>
+                <a href="parameters.html">Parameters</a>
+                <a href="dashboard.html">Dashboard</a>
+                <div class="language-switcher">
+                    <select id="language-select" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="mr">मराठी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="ur">اردو</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+        <div id="google_translate_element"></div>
+    </header>
+
+    <main>
+        <section class="details-section">
+            <h1>Farmer Details</h1>
+            <form id="farmerForm" class="details-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Farm Address</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="experience">Years of Farming Experience</label>
+                    <input type="number" id="experience" name="experience" min="0" required>
+                </div>
+                <button type="submit" class="btn">Save Details</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Kissan Sarthi. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,mr,gu,bn,ta,te,ml,kn,pa,ur',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        // Check for language preference
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedLanguage = localStorage.getItem('selectedLanguage');
+            if (!selectedLanguage) {
+                window.location.href = 'language.html';
+                return;
+            }
+
+            // Set the language selector to the saved language
+            const languageSelect = document.getElementById('language-select');
+            if (languageSelect) {
+                languageSelect.value = selectedLanguage;
+            }
+
+            // Set Google Translate to the selected language
+            if (typeof google !== 'undefined' && google.translate) {
+                const select = document.querySelector('.goog-te-combo');
+                if (select) {
+                    select.value = selectedLanguage;
+                    select.dispatchEvent(new Event('change'));
+                }
+            }
+
+            // Load saved farmer details
+            const savedDetails = localStorage.getItem('farmerDetails');
+            if (savedDetails) {
+                const details = JSON.parse(savedDetails);
+                Object.keys(details).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = details[key];
+                    }
+                });
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('farmerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            localStorage.setItem('farmerDetails', JSON.stringify(data));
+            
+            // Add transition effect
+            document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                window.location.href = 'parameters.html';
+            }, 300);
+        });
+
+        // Handle language change
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // Update Google Translate
+            if (typeof google !== 'undefined' && google.translate) {
+                const select = document.querySelector('.goog-te-combo');
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event('change'));
+                }
+            }
+
+            // Add transition effect
+            document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+
+        // Add smooth transitions for navigation
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (!link.classList.contains('active')) {
+                    e.preventDefault();
+                    const href = link.getAttribute('href');
+                    document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 300);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

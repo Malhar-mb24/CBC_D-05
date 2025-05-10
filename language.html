@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Language - Kissan Sarthi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .language-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+        }
+
+        .language-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .language-card h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .language-card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .language-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-option:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-option.selected {
+            border-color: #4CAF50;
+            background: #f1f8e9;
+        }
+
+        .language-option .lang-name {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .language-option .lang-native {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <main class="language-container">
+        <div class="language-card">
+            <h1>किसान सारथी</h1>
+            <h2>Select Your Language</h2>
+            <p>Choose your preferred language to continue</p>
+            
+            <div class="language-grid">
+                <button class="language-option" data-lang="en">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">English</span>
+                    <span class="lang-native">English</span>
+                </button>
+                <button class="language-option" data-lang="hi">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Hindi</span>
+                    <span class="lang-native">हिंदी</span>
+                </button>
+                <button class="language-option" data-lang="mr">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Marathi</span>
+                    <span class="lang-native">मराठी</span>
+                </button>
+                <button class="language-option" data-lang="gu">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Gujarati</span>
+                    <span class="lang-native">ગુજરાતી</span>
+                </button>
+                <button class="language-option" data-lang="bn">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Bengali</span>
+                    <span class="lang-native">বাংলা</span>
+                </button>
+                <button class="language-option" data-lang="ta">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Tamil</span>
+                    <span class="lang-native">தமிழ்</span>
+                </button>
+                <button class="language-option" data-lang="te">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Telugu</span>
+                    <span class="lang-native">తెలుగు</span>
+                </button>
+                <button class="language-option" data-lang="ml">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Malayalam</span>
+                    <span class="lang-native">മലയാളം</span>
+                </button>
+                <button class="language-option" data-lang="kn">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Kannada</span>
+                    <span class="lang-native">ಕನ್ನಡ</span>
+                </button>
+                <button class="language-option" data-lang="pa">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Punjabi</span>
+                    <span class="lang-native">ਪੰਜਾਬੀ</span>
+                </button>
+                <button class="language-option" data-lang="ur">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-name">Urdu</span>
+                    <span class="lang-native">اردو</span>
+                </button>
+            </div>
+
+            <button id="continue-btn" class="btn" disabled>
+                <span>Continue</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageOptions = document.querySelectorAll('.language-option');
+            const continueBtn = document.getElementById('continue-btn');
+            let selectedLanguage = null;
+
+            // Check if language was previously selected
+            const savedLanguage = localStorage.getItem('selectedLanguage');
+            if (savedLanguage) {
+                const savedOption = document.querySelector(`[data-lang="${savedLanguage}"]`);
+                if (savedOption) {
+                    savedOption.classList.add('selected');
+                    selectedLanguage = savedLanguage;
+                    continueBtn.disabled = false;
+                }
+            }
+
+            // Handle language selection
+            languageOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selection from other options
+                    languageOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selection to clicked option
+                    option.classList.add('selected');
+                    selectedLanguage = option.dataset.lang;
+                    
+                    // Enable continue button with animation
+                    continueBtn.disabled = false;
+                    continueBtn.style.animation = 'none';
+                    continueBtn.offsetHeight; // Trigger reflow
+                    continueBtn.style.animation = 'fadeIn 0.5s ease-out';
+                });
+            });
+
+            // Handle continue button click
+            continueBtn.addEventListener('click', () => {
+                if (selectedLanguage) {
+                    // Add loading state
+                    continueBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                    continueBtn.disabled = true;
+
+                    // Save selected language
+                    localStorage.setItem('selectedLanguage', selectedLanguage);
+                    
+                    // Add transition effect
+                    document.querySelector('.language-card').style.animation = 'slideOut 0.5s ease-in forwards';
+                    
+                    // Redirect after animation
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 500);
+                }
+            });
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && selectedLanguage && !continueBtn.disabled) {
+                    continueBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

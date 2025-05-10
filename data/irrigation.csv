@@ -1,0 +1,6 @@
+method,water_efficiency,cost_per_hectare,maintenance_level
+Drip Irrigation,90%,50000,Medium
+Sprinkler,75%,35000,Low
+Flood Irrigation,60%,20000,Low
+Subsurface,85%,45000,High
+Manual,50%,10000,Low 
