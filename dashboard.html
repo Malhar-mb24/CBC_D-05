@@ -22,6 +22,7 @@
                 <a href="details.html">Farmer Details</a>
                 <a href="parameters.html">Parameters</a>
                 <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="badge-details.html">Badge Details</a>
                 <a href="language.html">Language</a>
             </div>
         </nav>
@@ -80,6 +81,17 @@
                 <!-- Badges will be loaded here -->
             </div>
         </section>
+
+        <script>
+            // Load badges when the page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize badges
+                const badgeSystem = window.badgeSystem;
+                
+                // Display badges
+                badgeSystem.displayBadges('badgesContainer');
+            });
+        </script>
 
         <section class="crop-analytics">
             <h2>Crop Analytics</h2>

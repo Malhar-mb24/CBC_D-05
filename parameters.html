@@ -12,6 +12,7 @@
     <!-- Add our custom scripts -->
     <script src="js/badges.js"></script>
     <script src="js/parameters.js"></script>
+    <script src="js/dashboard.js"></script>
 </head>
 <body>
     <header>
@@ -24,6 +25,7 @@
                 <a href="details.html">Details</a>
                 <a href="parameters.html" class="active">Parameters</a>
                 <a href="dashboard.html">Dashboard</a>
+                <a href="badge-details.html">Badge Details</a>
                 <div class="language-switcher">
                     <select id="language-select" onchange="changeLanguage(this.value)">
                         <option value="en">English</option>
@@ -349,18 +351,111 @@
         ];
 
         function calculateGrade() {
-            const values = {
-                soilType: document.getElementById('soilType').value,
-                waterAccess: document.getElementById('waterAccess').value,
-                fertilizerUsage: document.getElementById('fertilizerUsage').value,
-                pestManagement: document.getElementById('pestManagement').value,
-                cropRotation: document.getElementById('cropRotation').value
-            };
+            // Get all parameter values
+            const cropArea = parseFloat(document.getElementById('cropArea').value) || 0;
+            const irrigationType = document.getElementById('irrigationType').value;
+            const waterSource = document.getElementById('waterSource').value;
+            const soilType = document.getElementById('soilType').value;
+            const fertilizerUse = document.getElementById('fertilizerUse').value;
+            const pesticideUse = document.getElementById('pesticideUse').value;
+            const organicPractices = document.getElementById('organicPractices').value;
+            const waterConservation = document.getElementById('waterConservation').value;
+            
+            // Calculate scores for each category
+            let irrigationScore = 0;
+            let waterScore = 0;
+            let soilScore = 0;
+            let practiceScore = 0;
 
-            // Check if all fields are filled
-            if (Object.values(values).some(value => !value)) {
-                return;
+            // Calculate irrigation score
+            switch(irrigationType) {
+                case 'drip':
+                    irrigationScore = 90;
+                    break;
+                case 'sprinkler':
+                    irrigationScore = 70;
+                    break;
+                case 'flood':
+                    irrigationScore = 50;
+                    break;
             }
+
+            // Calculate water source score
+            switch(waterSource) {
+                case 'well':
+                    waterScore = 70;
+                    break;
+                case 'canal':
+                    waterScore = 80;
+                    break;
+                case 'river':
+                    waterScore = 90;
+                    break;
+                case 'rain':
+                    waterScore = 100;
+                    break;
+            }
+
+            // Calculate soil score
+            switch(soilType) {
+                case 'fertile':
+                    soilScore = 90;
+                    break;
+                case 'moderate':
+                    soilScore = 70;
+                    break;
+                case 'poor':
+                    soilScore = 50;
+                    break;
+            }
+
+            // Calculate practice score
+            practiceScore = (
+                (fertilizerUse === 'organic' ? 90 : 50) +
+                (pesticideUse === 'minimal' ? 90 : 50) +
+                (organicPractices === 'yes' ? 90 : 50) +
+                (waterConservation === 'yes' ? 90 : 50)
+            ) / 4;
+
+            // Calculate overall grade
+            const totalScore = Math.round((
+                (irrigationScore * 0.3) +
+                (waterScore * 0.2) +
+                (soilScore * 0.2) +
+                (practiceScore * 0.3)
+            ));
+
+            // Update dashboard
+            if (typeof window.updateDashboard === 'function') {
+                window.updateDashboard({
+                    cropArea: cropArea,
+                    irrigationScore: irrigationScore,
+                    waterScore: waterScore,
+                    soilScore: soilScore,
+                    practiceScore: practiceScore,
+                    totalScore: totalScore
+                });
+            }
+
+            // Update badges
+            if (typeof window.updateBadges === 'function') {
+                window.updateBadges({
+                    totalScore: totalScore,
+                    irrigationScore: irrigationScore,
+                    waterScore: waterScore,
+                    soilScore: soilScore,
+                    practiceScore: practiceScore
+                });
+            }
+
+            // Store data for later use
+            localStorage.setItem('farmParameters', JSON.stringify({
+                cropArea: cropArea,
+                irrigationType: irrigationType,
+                waterSource: waterSource,
+                soilType: soilType,
+                totalScore: totalScore
+            }));
 
             // Count optimal factors
             let optimalCount = 0;
