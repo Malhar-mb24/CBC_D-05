@@ -321,13 +321,46 @@ class ParametersManager {
             });
         }
 
-        // Render badges
+        // Render badges in parameters preview
         badgeContainer.innerHTML = this.badges.map(badge => `
             <div class="badge" style="background-color: ${badge.color}">
                 <i class="fas fa-${badge.icon}"></i>
                 <span>${badge.name}</span>
             </div>
         `).join('');
+
+        // --- NEW: Persist badges for dashboard profile ---
+        // Gather all relevant selections in a flat array for badgeSystem
+        if (window.badgeSystem) {
+            const farmerId = localStorage.getItem('currentFarmerId');
+            if (farmerId) {
+                // Flatten all parameter selections into a single array of strings
+                const selections = [];
+                if (Array.isArray(this.parameters.crops)) {
+                    this.parameters.crops.forEach(crop => {
+                        Object.values(crop).forEach(val => selections.push(String(val)));
+                    });
+                }
+                if (Array.isArray(this.parameters.irrigationMethods)) {
+                    this.parameters.irrigationMethods.forEach(method => {
+                        Object.values(method).forEach(val => selections.push(String(val)));
+                    });
+                }
+                if (Array.isArray(this.parameters.landTypes)) {
+                    this.parameters.landTypes.forEach(land => {
+                        Object.values(land).forEach(val => selections.push(String(val)));
+                    });
+                }
+                if (Array.isArray(this.parameters.soilTypes)) {
+                    this.parameters.soilTypes.forEach(soil => {
+                        Object.values(soil).forEach(val => selections.push(String(val)));
+                    });
+                }
+                // Call badge system to check and award badges
+                window.badgeSystem.checkAndAwardBadges('parameters', selections);
+                window.dispatchEvent(new Event('badgesUpdated'));
+            }
+        }
     }
 
     // Update parameters and refresh visualizations

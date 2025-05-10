@@ -1,78 +1,124 @@
 class VisualizationHandler {
     constructor() {
         this.charts = {};
-        this.parameters = JSON.parse(localStorage.getItem('farmParameters')) || {};
     }
 
     // Initialize all visualizations
     initializeVisualizations() {
-        this.initializeYieldChart();
-        this.initializeCropDistributionChart();
-        this.initializeWaterRequirementsChart();
-        this.initializeIrrigationEfficiencyChart();
-        this.initializeGrowthImpactChart();
-        this.initializeResourceUtilizationChart();
-        this.initializeMarketTrendsChart();
-        this.initializePricePredictionsChart();
+        this.initializeCropCharts();
+        this.initializeIrrigationCharts();
+        this.initializeGrowthCharts();
+        this.initializeMarketCharts();
     }
 
     // Initialize crop-related charts
-    initializeYieldChart() {
+    initializeCropCharts() {
+        const cropData = JSON.parse(localStorage.getItem('processedData'))?.crops;
+        if (!cropData) return;
+
+        // Yield Estimation Chart
+        this.createYieldChart(cropData.yieldEstimates);
+        
+        // Crop Distribution Chart
+        this.createCropDistributionChart(cropData.selected);
+    }
+
+    // Initialize irrigation-related charts
+    initializeIrrigationCharts() {
+        const irrigationData = JSON.parse(localStorage.getItem('processedData'))?.irrigation;
+        if (!irrigationData) return;
+
+        // Water Requirements Chart
+        this.createWaterRequirementsChart(irrigationData.waterRequirements);
+        
+        // Irrigation Efficiency Chart
+        this.createEfficiencyChart(irrigationData.efficiency);
+    }
+
+    // Initialize growth-related charts
+    initializeGrowthCharts() {
+        const growthData = JSON.parse(localStorage.getItem('processedData'))?.growth;
+        if (!growthData) return;
+
+        // Growth Impact Chart
+        this.createGrowthImpactChart(growthData.impact);
+        
+        // Resource Utilization Chart
+        this.createResourceUtilizationChart(growthData.methods);
+    }
+
+    // Initialize market-related charts
+    initializeMarketCharts() {
+        const marketData = JSON.parse(localStorage.getItem('processedData'))?.market;
+        if (!marketData) return;
+
+        // Market Trends Chart
+        this.createMarketTrendsChart(marketData.trends);
+        
+        // Price Predictions Chart
+        this.createMarketPredictionsChart(marketData.predictions);
+    }
+
+    // Chart Creation Methods
+    createYieldChart(yieldData) {
         const ctx = document.getElementById('yield-chart');
         if (!ctx) return;
 
         this.charts.yield = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: yieldData.map(d => d.crop),
                 datasets: [{
                     label: 'Estimated Yield (quintals)',
-                    data: this.calculateYieldData(),
-                    borderColor: '#4CAF50',
-                    tension: 0.1
+                    data: yieldData.map(d => d.estimatedYield),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Crop Yield Estimation'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Yield (quintals)'
+                        }
                     }
                 }
             }
         });
     }
 
-    initializeCropDistributionChart() {
+    createCropDistributionChart(crops) {
         const ctx = document.getElementById('crop-distribution-chart');
         if (!ctx) return;
 
-        const cropData = this.getCropDistributionData();
         this.charts.cropDistribution = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: cropData.labels,
+                labels: crops,
                 datasets: [{
-                    data: cropData.values,
+                    data: crops.map(() => Math.random() * 100),
                     backgroundColor: [
-                        '#4CAF50',
-                        '#2196F3',
-                        '#FFC107',
-                        '#9C27B0',
-                        '#FF5722'
-                    ]
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
                     title: {
                         display: true,
                         text: 'Crop Distribution'
@@ -82,117 +128,129 @@ class VisualizationHandler {
         });
     }
 
-    initializeWaterRequirementsChart() {
+    createWaterRequirementsChart(waterData) {
         const ctx = document.getElementById('water-requirements-chart');
         if (!ctx) return;
 
         this.charts.waterRequirements = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: waterData.map(d => d.method),
                 datasets: [{
-                    label: 'Water Requirements (mm)',
-                    data: this.calculateWaterRequirements(),
-                    backgroundColor: '#2196F3'
+                    label: 'Water Required (L)',
+                    data: waterData.map(d => d.waterNeeded),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Monthly Water Requirements'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Water Required (L)'
+                        }
                     }
                 }
             }
         });
     }
 
-    initializeIrrigationEfficiencyChart() {
+    createEfficiencyChart(efficiencyData) {
         const ctx = document.getElementById('irrigation-efficiency-chart');
         if (!ctx) return;
 
-        const efficiencyData = this.calculateIrrigationEfficiency();
-        this.charts.irrigationEfficiency = new Chart(ctx, {
-            type: 'doughnut',
+        this.charts.efficiency = new Chart(ctx, {
+            type: 'radar',
             data: {
-                labels: ['Efficient', 'Moderate', 'Inefficient'],
+                labels: efficiencyData.map(d => d.method),
                 datasets: [{
-                    data: efficiencyData,
-                    backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
+                    label: 'Efficiency (%)',
+                    data: efficiencyData.map(d => d.efficiency),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Irrigation Efficiency'
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Efficiency (%)'
+                        }
                     }
                 }
             }
         });
     }
 
-    initializeGrowthImpactChart() {
+    createGrowthImpactChart(impactData) {
         const ctx = document.getElementById('growth-impact-chart');
         if (!ctx) return;
 
         this.charts.growthImpact = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                labels: impactData.map(d => d.method),
                 datasets: [{
-                    label: 'Growth Rate',
-                    data: this.calculateGrowthImpact(),
-                    borderColor: '#4CAF50',
+                    label: 'Impact (%)',
+                    data: impactData.map(d => d.impact),
+                    fill: false,
+                    borderColor: 'rgba(255, 99, 132, 1)',
                     tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Growth Impact Analysis'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Impact (%)'
+                        }
                     }
                 }
             }
         });
     }
 
-    initializeResourceUtilizationChart() {
+    createResourceUtilizationChart(methods) {
         const ctx = document.getElementById('resource-utilization-chart');
         if (!ctx) return;
 
-        const resourceData = this.calculateResourceUtilization();
         this.charts.resourceUtilization = new Chart(ctx, {
-            type: 'radar',
+            type: 'pie',
             data: {
-                labels: ['Water', 'Fertilizer', 'Pesticides', 'Labor', 'Equipment'],
+                labels: methods,
                 datasets: [{
-                    label: 'Resource Utilization',
-                    data: resourceData,
-                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                    borderColor: '#4CAF50',
-                    pointBackgroundColor: '#4CAF50'
+                    data: methods.map(() => Math.random() * 100),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        position: 'top',
-                    },
                     title: {
                         display: true,
                         text: 'Resource Utilization'
@@ -202,7 +260,7 @@ class VisualizationHandler {
         });
     }
 
-    initializeMarketTrendsChart() {
+    createMarketTrendsChart(trendsData) {
         const ctx = document.getElementById('market-trends-chart');
         if (!ctx) return;
 
@@ -211,112 +269,56 @@ class VisualizationHandler {
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [{
-                    label: 'Market Price (₹/quintal)',
-                    data: this.calculateMarketTrends(),
-                    borderColor: '#FF5722',
+                    label: 'Market Trend',
+                    data: [65, 59, 80, 81, 56, 55],
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
                     tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Market Price Trends'
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Price (₹)'
+                        }
                     }
                 }
             }
         });
     }
 
-    initializePricePredictionsChart() {
+    createMarketPredictionsChart(predictionsData) {
         const ctx = document.getElementById('price-predictions-chart');
         if (!ctx) return;
 
-        this.charts.pricePredictions = new Chart(ctx, {
-            type: 'line',
+        this.charts.marketPredictions = new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: predictionsData.map(d => d.item),
                 datasets: [{
-                    label: 'Predicted Price (₹/quintal)',
-                    data: this.calculatePricePredictions(),
-                    borderColor: '#9C27B0',
-                    tension: 0.1,
-                    borderDash: [5, 5]
+                    label: 'Predicted Price (₹)',
+                    data: predictionsData.map(d => d.prediction),
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Price Predictions'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Price (₹)'
+                        }
                     }
                 }
             }
         });
-    }
-
-    // Helper methods for data calculation
-    calculateYieldData() {
-        // Mock data - replace with actual calculations based on parameters
-        return [65, 70, 75, 80, 85, 90];
-    }
-
-    getCropDistributionData() {
-        const cropType = this.parameters.cropType || 'wheat';
-        const cropArea = this.parameters.cropArea || 0;
-        
-        // Mock data - replace with actual calculations
-        return {
-            labels: [cropType, 'Other Crops'],
-            values: [cropArea, 100 - cropArea]
-        };
-    }
-
-    calculateWaterRequirements() {
-        // Mock data - replace with actual calculations based on parameters
-        return [50, 60, 70, 80, 90, 100];
-    }
-
-    calculateIrrigationEfficiency() {
-        const irrigationType = this.parameters.irrigationType || 'flood';
-        
-        // Mock data - replace with actual calculations
-        switch (irrigationType) {
-            case 'drip':
-                return [80, 15, 5];
-            case 'sprinkler':
-                return [60, 30, 10];
-            default:
-                return [40, 40, 20];
-        }
-    }
-
-    calculateGrowthImpact() {
-        // Mock data - replace with actual calculations
-        return [10, 25, 45, 70];
-    }
-
-    calculateResourceUtilization() {
-        // Mock data - replace with actual calculations
-        return [80, 70, 60, 85, 75];
-    }
-
-    calculateMarketTrends() {
-        // Mock data - replace with actual calculations
-        return [1500, 1600, 1550, 1700, 1650, 1800];
-    }
-
-    calculatePricePredictions() {
-        // Mock data - replace with actual calculations
-        return [1800, 1850, 1900, 1950, 2000, 2050];
     }
 
     // Update all charts with new data

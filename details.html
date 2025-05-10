@@ -3,164 +3,1658 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farmer Details - Kissan Sarthi</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <title>Farmer Details - Krishi Saathi</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #13a538;
+            --primary-dark: #0d8229;
+            --primary-light: #44c662;
+            --accent: #ff6b35;
+            --text: #333;
+            --text-light: #666;
+            --background: #f9f9f9;
+            --card: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #13a538, #0d8229);
+            --gradient-accent: linear-gradient(135deg, #ff6b35, #ff9500);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+            --error: #ff3b30;
+            --success: #34c759;
+            --info: #007aff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(19, 165, 56, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(19, 165, 56, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(19, 165, 56, 0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            animation: fadeIn 0.5s ease-out;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo a:before {
+            content: '🌱';
+            margin-right: 8px;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h1:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* Form Styling */
+        form {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .ks-input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            background: white;
+            outline: none;
+        }
+
+        .ks-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(19, 165, 56, 0.2);
+        }
+
+        .ks-input.filled + label,
+        .ks-input:focus + label {
+            transform: translateY(-25px) scale(0.85);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .ks-input + label {
+            position: absolute;
+            left: 16px;
+            top: 12px;
+            color: var(--text-light);
+            pointer-events: none;
+            transition: var(--transition);
+            transform-origin: left top;
+            background: white;
+            padding: 0 4px;
+        }
+
+        .transcript {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 6px;
+            min-height: 20px;
+            font-style: italic;
+        }
+
+        .ks-mic-btn {
+            position: absolute;
+            right: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .ks-mic-btn:hover {
+            background-color: rgba(19, 165, 56, 0.1);
+        }
+
+        .ks-mic-btn.active {
+            animation: pulse 1.5s infinite;
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .mic-icon {
+            font-size: 1.2rem;
+        }
+
+        .otp-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .otp-group .ks-input {
+            flex: 1;
+        }
+
+        /* Buttons */
+        .ks-btn-primary, 
+        .ks-btn-secondary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .ks-btn-primary {
+            background: var(--gradient);
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .ks-btn-primary:hover {
+            box-shadow: 0 4px 12px rgba(19, 165, 56, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .ks-btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .ks-btn-secondary:hover {
+            background: rgba(19, 165, 56, 0.1);
+        }
+
+        /* OTP Modal */
+        .otp-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+            backdrop-filter: blur(3px);
+        }
+
+        .otp-modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .otp-modal-content:before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 5px;
+            top: 0;
+            left: -50%;
+            background: var(--gradient);
+        }
+
+        .otp-display {
+            margin: 1.5rem 0;
+            background: rgba(19, 165, 56, 0.1);
+            padding: 10px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #otpValue {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: 3px;
+        }
+
+        .copy-otp {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+
+        .copy-otp:hover {
+            background: #f5f5f5;
+        }
+
+        .otp-input-wrapper {
+            margin-bottom: 1rem;
+        }
+
+        .otp-input {
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .otp-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(19, 165, 56, 0.2);
+            outline: none;
+        }
+
+        .otp-error {
+            color: var(--error);
+            font-size: 0.9rem;
+            min-height: 20px;
+            transition: var(--transition);
+        }
+
+        /* Footer */
+        footer {
+            background: #f1f1f1;
+            padding: 1rem 0;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        footer p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Map and Weather Section */
+        .map-weather-section {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 1rem;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .leaflet-marker-icon {
+            font-size: 24px;
+        }
+        
+        .soil-marker-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .soil-popup h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary);
+        }
+        
+        .weather-card {
+            background: linear-gradient(to right, #1e5799, #2989d8);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .weather-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .weather-icon-large {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .current-temp {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: right;
+        }
+        
+        .weather-condition {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+        
+        .weather-details {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+        }
+        
+        .weather-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .weather-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .weather-detail {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .detail-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .soil-info {
+            padding: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .soil-info h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .soil-cards {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .soil-card {
+            min-width: 200px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .soil-card-header {
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+        
+        .soil-card-content {
+            padding: 1rem;
+        }
+        
+        .soil-card-content p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .loading-forecast {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .section-toggle {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .section-toggle h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .section-toggle .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .section-toggle.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .section-content.active {
+            max-height: 2000px;
+        }
+
+        #map {
+            height: 300px;
+            width: 100%;
+            border-bottom: 1px solid #eee;
+        }
+
+        .location-info {
+            background: var(--card);
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .location-info p {
+            margin: 0.5rem 0;
+            color: var(--text);
+        }
+
+        .weather-info {
+            background: var(--card);
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .weather-info h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .weather-info p {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #f5f5f5;
+            padding-bottom: 0.5rem;
+        }
+
+        .weather-info p span {
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .forecast-container {
+            background: var(--card);
+            padding: 1rem;
+        }
+
+        .forecast-container h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .forecast-days {
+            display: flex;
+            gap: 0.8rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+        }
+
+        .forecast-days::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .forecast-days::-webkit-scrollbar-thumb {
+            background-color: var(--primary-light);
+            border-radius: 3px;
+        }
+
+        .forecast-day {
+            min-width: 100px;
+            flex: 0 0 auto;
+            background: #f9fafb;
+            border-radius: var(--border-radius);
+            padding: 0.8rem;
+            text-align: center;
+            transition: transform 0.2s ease;
+            border: 1px solid #eee;
+        }
+
+        .forecast-day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .forecast-day p {
+            margin: 0.3rem 0;
+            font-size: 0.85rem;
+        }
+
+        .forecast-day p strong {
+            color: var(--primary-dark);
+        }
+
+        .weather-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            form, .map-weather-section {
+                padding: 1.5rem;
+            }
+            
+            .map-weather-section {
+                padding: 0;
+            }
+            
+            #map {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .otp-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .ks-btn-secondary {
+                width: 100%;
+            }
+            
+            .forecast-day {
+                min-width: 90px;
+                padding: 0.5rem;
+            }
+            
+            #map {
+                height: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav>
-            <div class="nav-brand">
-                <h1>किसान सारथी</h1>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Krishi Saathi</a>
             </div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="details.html" class="active">Details</a>
-                <a href="parameters.html">Parameters</a>
-                <a href="dashboard.html">Dashboard</a>
-                <div class="language-switcher">
-                    <select id="language-select" onchange="changeLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी</option>
-                        <option value="mr">मराठी</option>
-                        <option value="gu">ગુજરાતી</option>
-                        <option value="bn">বাংলা</option>
-                        <option value="ta">தமிழ்</option>
-                        <option value="te">తెలుగు</option>
-                        <option value="ml">മലയാളം</option>
-                        <option value="kn">ಕನ್ನಡ</option>
-                        <option value="pa">ਪੰਜਾਬੀ</option>
-                        <option value="ur">اردو</option>
-                    </select>
-                </div>
+            <div class="language-selector">
+                <div id="google_translate_element"></div>
             </div>
-        </nav>
-        <div id="google_translate_element"></div>
+        </div>
     </header>
 
-    <main>
-        <section class="details-section">
+    <main class="details-page">
+        <div class="container">
             <h1>Farmer Details</h1>
-            <form id="farmerForm" class="details-form">
+            <form id="farmerForm">
                 <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <div class="input-wrapper">
+                        <input type="text" id="name" name="name" class="ks-input" required>
+                        <label for="name">Full Name</label>
+                        <button type="button" class="ks-mic-btn" data-input="name">
+                            <span class="mic-icon">🎤</span>
+                        </button>
+                    </div>
+                    <div class="transcript" id="transcript-name"></div>
                 </div>
+
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <div class="input-wrapper">
+                        <input type="text" id="age" name="age" class="ks-input" required>
+                        <label for="age">Age</label>
+                        <button type="button" class="ks-mic-btn" data-input="age">
+                            <span class="mic-icon">🎤</span>
+                        </button>
+                    </div>
+                    <div class="transcript" id="transcript-age"></div>
                 </div>
+
                 <div class="form-group">
-                    <label for="address">Farm Address</label>
-                    <textarea id="address" name="address" required></textarea>
+                    <div class="input-wrapper">
+                        <input type="text" id="district" name="district" class="ks-input" required>
+                        <label for="district">District</label>
+                        <button type="button" class="ks-mic-btn" data-input="district">
+                            <span class="mic-icon">🎤</span>
+                        </button>
+                    </div>
+                    <div class="transcript" id="transcript-district"></div>
                 </div>
+
                 <div class="form-group">
-                    <label for="experience">Years of Farming Experience</label>
-                    <input type="number" id="experience" name="experience" min="0" required>
+                    <div class="input-wrapper">
+                        <input type="text" id="mobile" name="mobile" class="ks-input" required pattern="[0-9]{10}" maxlength="10">
+                        <label for="mobile">Mobile Number</label>
+                        <button type="button" class="ks-mic-btn" data-input="mobile">
+                            <span class="mic-icon">🎤</span>
+                        </button>
+                    </div>
+                    <div class="transcript" id="transcript-mobile"></div>
                 </div>
-                <button type="submit" class="btn">Save Details</button>
+
+                <div class="form-group">
+                    <div class="input-wrapper otp-group">
+                        <input type="text" id="mobileOTP" name="mobileOTP" class="ks-input" required pattern="[0-9]{4}" maxlength="4">
+                        <label for="mobileOTP">Mobile OTP</label>
+                        <button type="button" id="sendMobileOTP" class="ks-btn-secondary">Get OTP</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="aadhar" name="aadhar" class="ks-input" required pattern="[0-9]{12}" maxlength="12">
+                        <label for="aadhar">Aadhaar Number</label>
+                        <button type="button" class="ks-mic-btn" data-input="aadhar">
+                            <span class="mic-icon">🎤</span>
+                        </button>
+                    </div>
+                    <div class="transcript" id="transcript-aadhar"></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper otp-group">
+                        <input type="text" id="aadharOTP" name="aadharOTP" class="ks-input" required pattern="[0-9]{4}" maxlength="4">
+                        <label for="aadharOTP">Aadhaar OTP</label>
+                        <button type="button" id="sendAadharOTP" class="ks-btn-secondary">Get OTP</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="ks-btn-primary">Continue</button>
             </form>
-        </section>
+            
+            <!-- Weather Section -->
+            <div class="map-weather-section">
+                <div class="section-toggle active" id="weatherToggle">
+                    <h2>☁️ Weather Information</h2>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content active" id="weatherContent">
+                    <!-- Map Container -->
+                    <div class="map-container">
+                        <div id="map" style="height: 300px; width: 100%;"></div>
+                    </div>
+                    
+                    <!-- Location Info -->
+                    <div class="location-info">
+                        <p>📍 Location: <span id="locationName">Detecting your location...</span></p>
+                        <div id="coordinates">
+                            <p>🌐 Latitude: <span id="latitude">-</span></p>
+                            <p>🌐 Longitude: <span id="longitude">-</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="weather-card">
+                        <div class="weather-header">
+                            <div class="weather-icon-large" id="weatherIconLarge"></div>
+                            <div class="current-temp">
+                                <span id="tempLarge">-</span>°C
+                                <div class="weather-condition" id="conditionText">Loading weather data...</div>
+                            </div>
+                        </div>
+                        
+                        <div class="weather-details">
+                            <div class="weather-row">
+                                <div class="weather-detail">
+                                    <div class="detail-icon">💧</div>
+                                    <div class="detail-value"><span id="humidity">-</span>%</div>
+                                    <div class="detail-label">Humidity</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="detail-icon">💨</div>
+                                    <div class="detail-value"><span id="wind">-</span>km/h</div>
+                                    <div class="detail-label">Wind</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="detail-icon">🌡️</div>
+                                    <div class="detail-value"><span id="feelsLike">-</span>°C</div>
+                                    <div class="detail-label">Feels Like</div>
+                                </div>
+                            </div>
+                            <div class="weather-row">
+                                <div class="weather-detail">
+                                    <div class="detail-icon">📊</div>
+                                    <div class="detail-value"><span id="pressure">-</span>mb</div>
+                                    <div class="detail-label">Pressure</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="detail-icon">☀️</div>
+                                    <div class="detail-value"><span id="uv">-</span></div>
+                                    <div class="detail-label">UV Index</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="detail-icon">👁️</div>
+                                    <div class="detail-value"><span id="visibility">-</span>km</div>
+                                    <div class="detail-label">Visibility</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="forecast-container">
+                        <h3>5-Day Weather Forecast</h3>
+                        <div class="forecast-days" id="forecastDays">
+                            <!-- Forecast days will be inserted here by JavaScript -->
+                            <div class="loading-forecast">Loading forecast data...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="soil-info">
+                        <h3>🌱 Soil Information</h3>
+                        <div class="soil-cards" id="soilCards">
+                            <div class="soil-card">
+                                <div class="soil-card-header">Clay Loam</div>
+                                <div class="soil-card-content">
+                                    <p>pH Level: <strong>6.8</strong></p>
+                                    <p>Fertility: <strong>Medium-High</strong></p>
+                                    <p>Water Retention: <strong>Good</strong></p>
+                                    <p>Ideal for: <strong>Most crops</strong></p>
+                                </div>
+                            </div>
+                            <div class="soil-card">
+                                <div class="soil-card-header">Sandy Loam</div>
+                                <div class="soil-card-content">
+                                    <p>pH Level: <strong>7.2</strong></p>
+                                    <p>Fertility: <strong>Medium</strong></p>
+                                    <p>Water Retention: <strong>Moderate</strong></p>
+                                    <p>Ideal for: <strong>Root vegetables</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
+    <!-- OTP Modal -->
+    <div id="otpModal" class="otp-modal">
+        <div class="otp-modal-content">
+            <h3 id="otpModalTitle">Mobile OTP Sent!</h3>
+            <p id="otpModalMsg">Please enter the OTP sent to your mobile number:</p>
+            <div class="otp-display">
+                <span id="otpValue">1234</span>
+                <button id="copyOtpBtn" class="copy-otp">Copy</button>
+            </div>
+            <div class="otp-input-wrapper">
+                <input type="text" id="otpModalInput" class="otp-input" maxlength="4" placeholder="Enter OTP">
+                <p id="otpModalError" class="otp-error"></p>
+            </div>
+            <button id="otpModalSubmit" class="ks-btn-primary">Verify</button>
+        </div>
+    </div>
+
     <footer>
-        <p>&copy; 2024 Kissan Sarthi. All rights reserved.</p>
+        <div class="container">
+            <p> 2023 Krishi Saathi. All rights reserved.</p>
+        </div>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Initialize Google Translate
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,hi,mr,gu,bn,ta,te,ml,kn,pa,ur',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
-
-        // Check for language preference
-        document.addEventListener('DOMContentLoaded', () => {
-            const selectedLanguage = localStorage.getItem('selectedLanguage');
-            if (!selectedLanguage) {
-                window.location.href = 'language.html';
-                return;
-            }
-
-            // Set the language selector to the saved language
-            const languageSelect = document.getElementById('language-select');
-            if (languageSelect) {
-                languageSelect.value = selectedLanguage;
-            }
-
-            // Set Google Translate to the selected language
-            if (typeof google !== 'undefined' && google.translate) {
-                const select = document.querySelector('.goog-te-combo');
-                if (select) {
-                    select.value = selectedLanguage;
-                    select.dispatchEvent(new Event('change'));
-                }
-            }
-
-            // Load saved farmer details
-            const savedDetails = localStorage.getItem('farmerDetails');
-            if (savedDetails) {
-                const details = JSON.parse(savedDetails);
-                Object.keys(details).forEach(key => {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.value = details[key];
-                    }
+        (function() {
+            // --- Animated floating labels ---
+            document.querySelectorAll('.ks-input').forEach(function(input) {
+                input.addEventListener('input', function() {
+                    if (this.value) this.classList.add('filled');
+                    else this.classList.remove('filled');
                 });
+                // Check initially for saved values
+                if (input.value) input.classList.add('filled');
+            });
+
+            // --- Enhanced Voice Recognition ---
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            let recognition;
+            let currentInput;
+            let activeButton;
+            const langCodes = { 
+                en: 'en-IN', 
+                hi: 'hi-IN', 
+                mr: 'mr-IN',
+                gu: 'gu-IN', 
+                bn: 'bn-IN', 
+                ta: 'ta-IN', 
+                te: 'te-IN', 
+                ml: 'ml-IN'
+            };
+            let selectedLang = 'en'; // Default
+
+            // Set up recognition with high accuracy
+            function setupRecognition() {
+                if (!SpeechRecognition) {
+                    alert('Your browser does not support Speech Recognition. Please use Chrome or Edge.');
+                    return null;
+                }
+                
+                const instance = new SpeechRecognition();
+                instance.continuous = false;
+                instance.interimResults = true;
+                instance.maxAlternatives = 3;
+                instance.lang = langCodes[selectedLang] || 'en-IN';
+                
+                return instance;
             }
-        });
 
-        // Handle form submission
-        document.getElementById('farmerForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            localStorage.setItem('farmerDetails', JSON.stringify(data));
-            
-            // Add transition effect
-            document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
-            setTimeout(() => {
-                window.location.href = 'parameters.html';
-            }, 300);
-        });
-
-        // Handle language change
-        function changeLanguage(lang) {
-            localStorage.setItem('selectedLanguage', lang);
-            
-            // Update Google Translate
-            if (typeof google !== 'undefined' && google.translate) {
-                const select = document.querySelector('.goog-te-combo');
-                if (select) {
-                    select.value = lang;
-                    select.dispatchEvent(new Event('change'));
+            function updateTranscript(inputId, text, final = false) {
+                const transcriptEl = document.getElementById('transcript-' + inputId);
+                if (!transcriptEl) return;
+                
+                transcriptEl.textContent = text ? 
+                    (final ? '✓ ' : '🎙 ') + text : '';
+                    
+                if (final) {
+                    transcriptEl.style.color = 'var(--success)';
+                    setTimeout(() => {
+                        transcriptEl.style.color = 'var(--text-light)';
+                    }, 2000);
                 }
             }
 
-            // Add transition effect
-            document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
-            setTimeout(() => {
-                window.location.reload();
-            }, 300);
-        }
+            function startListening(inputId) {
+                // Reset any active listening session
+                if (recognition) {
+                    recognition.abort();
+                }
+                
+                recognition = setupRecognition();
+                if (!recognition) return;
+                
+                // Reset all mic buttons
+                document.querySelectorAll('.ks-mic-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Set current input and activate button
+                currentInput = document.getElementById(inputId);
+                activeButton = document.querySelector(`.ks-mic-btn[data-input="${inputId}"]`);
+                if (activeButton) activeButton.classList.add('active');
+                
+                // Show user we're listening
+                updateTranscript(inputId, 'Listening...', false);
+                
+                let finalTranscript = '';
+                let interimTranscript = '';
 
-        // Add smooth transitions for navigation
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                if (!link.classList.contains('active')) {
-                    e.preventDefault();
-                    const href = link.getAttribute('href');
-                    document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
+                recognition.onresult = (event) => {
+                    interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript = event.results[i][0].transcript;
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    
+                    // Update the transcript in real-time
+                    updateTranscript(inputId, finalTranscript || interimTranscript, false);
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error', event.error);
+                    updateTranscript(inputId, 'Error: ' + event.error, true);
+                    if (activeButton) activeButton.classList.remove('active');
+                };
+
+                recognition.onend = () => {
+                    let transcript = finalTranscript || interimTranscript;
+                    if (transcript) {
+                        // Format numbers correctly for mobile and aadhar fields
+                        if (inputId === 'mobile' || inputId === 'aadhar') {
+                            transcript = transcript.replace(/\D/g, '');
+                        }
+                        
+                        // Update the input field
+                        if (currentInput) {
+                            currentInput.value = transcript;
+                            currentInput.classList.add('filled');
+                            // Trigger input event for validation
+                            currentInput.dispatchEvent(new Event('input'));
+                        }
+                        
+                        updateTranscript(inputId, transcript, true);
+                    } else {
+                        updateTranscript(inputId, '', true);
+                    }
+                    
+                    if (activeButton) activeButton.classList.remove('active');
+                };
+
+                recognition.start();
+            }
+
+            // Set up all mic buttons
+            document.querySelectorAll('.ks-mic-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const inputId = btn.getAttribute('data-input');
+                    if (inputId) startListening(inputId);
+                });
+            });
+
+            // --- OTP System ---
+            let otpType = '';
+            let currentOTP = '';
+            const otpModal = document.getElementById('otpModal');
+            const otpModalTitle = document.getElementById('otpModalTitle');
+            const otpModalMsg = document.getElementById('otpModalMsg');
+            const otpValue = document.getElementById('otpValue');
+            const otpModalInput = document.getElementById('otpModalInput');
+            const otpModalError = document.getElementById('otpModalError');
+
+            function generateOTP() {
+                return Math.floor(1000 + Math.random() * 9000).toString();
+            }
+
+            function showOtpModal(type, otp) {
+                otpType = type;
+                currentOTP = otp;
+                
+                // Set modal content
+                otpModalTitle.textContent = type === 'mobile' ? 
+                    'Mobile OTP Sent!' : 'Aadhaar OTP Sent!';
+                otpModalMsg.textContent = `Please enter the OTP sent to your ${type === 'mobile' ? 'mobile' : 'Aadhaar'} number:`;
+                otpValue.textContent = otp;
+                otpModalInput.value = '';
+                otpModalError.textContent = '';
+                
+                // Show modal
+                otpModal.style.display = 'flex';
+                
+                // Focus on input after animation
+                setTimeout(() => otpModalInput.focus(), 300);
+            }
+
+            // Send Mobile OTP
+            document.getElementById('sendMobileOTP').addEventListener('click', () => {
+                const mobileInput = document.getElementById('mobile');
+                if (!mobileInput.value || mobileInput.value.length !== 10) {
+                    alert('Please enter a valid 10-digit mobile number first');
+                    return;
+                }
+                showOtpModal('mobile', generateOTP());
+            });
+
+            // Send Aadhaar OTP
+            document.getElementById('sendAadharOTP').addEventListener('click', () => {
+                const aadharInput = document.getElementById('aadhar');
+                if (!aadharInput.value || aadharInput.value.length !== 12) {
+                    alert('Please enter a valid 12-digit Aadhaar number first');
+                    return;
+                }
+                showOtpModal('aadhar', generateOTP());
+            });
+
+            // Copy OTP button
+            document.getElementById('copyOtpBtn').addEventListener('click', () => {
+                navigator.clipboard.writeText(currentOTP)
+                    .then(() => {
+                        otpModalError.textContent = 'OTP copied!';
+                        otpModalError.style.color = 'var(--success)';
+                        setTimeout(() => {
+                            otpModalError.textContent = '';
+                        }, 1000);
+                    })
+                    .catch(err => {
+                        console.error('Could not copy OTP: ', err);
+                        otpModalError.textContent = 'Failed to copy';
+                        otpModalError.style.color = 'var(--error)';
+                    });
+            });
+
+            // Verify OTP in modal
+            document.getElementById('otpModalSubmit').addEventListener('click', () => {
+                const enteredOTP = otpModalInput.value.trim();
+                if (enteredOTP !== currentOTP) {
+                    otpModalError.textContent = 'Incorrect OTP. Please try again.';
+                    otpModalError.style.color = 'var(--error)';
+                    return;
+                }
+                
+                // Set OTP in appropriate field
+                const otpField = document.getElementById(otpType + 'OTP');
+                if (otpField) {
+                    otpField.value = currentOTP;
+                    otpField.classList.add('filled');
+                }
+                
+                // Close modal with animation
+                otpModal.style.animation = 'fadeOut 0.3s';
+                setTimeout(() => {
+                    otpModal.style.display = 'none';
+                    otpModal.style.animation = '';
+                }, 300);
+            });
+
+            // Close modal on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && otpModal.style.display === 'flex') {
+                    otpModal.style.animation = 'fadeOut 0.3s';
                     setTimeout(() => {
-                        window.location.href = href;
+                        otpModal.style.display = 'none';
+                        otpModal.style.animation = '';
                     }, 300);
                 }
             });
-        });
+
+            // --- Form Submission ---
+            document.getElementById('farmerForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Validate mobile OTP
+                const mobileOTP = document.getElementById('mobileOTP').value;
+                if (!mobileOTP || mobileOTP.length !== 4) {
+                    alert('Please verify your mobile number with OTP first');
+                    return;
+                }
+                
+                // Validate Aadhaar OTP
+                const aadharOTP = document.getElementById('aadharOTP').value;
+                if (!aadharOTP || aadharOTP.length !== 4) {
+                    alert('Please verify your Aadhaar number with OTP first');
+                    return;
+                }
+                
+                // Collect form data
+                const formData = new FormData(e.target);
+                const farmerData = {};
+                formData.forEach((value, key) => {
+                    farmerData[key] = value;
+                });
+                
+                // Store data in localStorage
+                localStorage.setItem('farmerDetails', JSON.stringify(farmerData));
+                
+                // Transition to next page
+                document.body.style.animation = 'fadeOut 0.5s';
+                setTimeout(() => {
+                    window.location.href = 'parameters.html';
+                }, 500);
+            });
+
+            // Load saved farmer details if available
+            try {
+                const savedDetails = localStorage.getItem('farmerDetails');
+                if (savedDetails) {
+                    const details = JSON.parse(savedDetails);
+                    Object.keys(details).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input) {
+                            input.value = details[key];
+                            if (details[key]) input.classList.add('filled');
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Error loading saved details:', err);
+            }
+            
+            // --- Weather Section ---
+            const weatherToggle = document.getElementById('weatherToggle');
+            const weatherContent = document.getElementById('weatherContent');
+            
+            // Toggle weather section
+            weatherToggle.addEventListener('click', () => {
+                weatherToggle.classList.toggle('active');
+                weatherContent.classList.toggle('active');
+            });
+            
+            // Initialize map and weather data immediately
+            setTimeout(() => {
+                initWeatherAndMapData();
+            }, 500); // Short delay to ensure DOM is ready
+            
+            // Weather API configuration - USING THE EXACT API KEY PROVIDED
+            const WEATHER_API_KEY = '6bb04fef444c491abbf101031251005'; 
+            const NOMINATIM_API_URL = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=';  
+            
+            // Global variable to store the map instance
+            let myMap = null;
+            
+            // Main initialization function for both map and weather
+            function initWeatherAndMapData() {
+                console.log('Starting initialization of map and weather...');
+                
+                // Default coordinates (New Delhi) in case geolocation fails
+                const defaultLat = 28.6139;
+                const defaultLon = 77.2090;
+                
+                if (!navigator.geolocation) {
+                    console.warn("Geolocation not supported by browser");
+                    showErrorMessage("Your browser doesn't support geolocation. Using default location.");
+                    initializeMapAndWeather(defaultLat, defaultLon);
+                    return;
+                }
+                
+                // Try to get user's location
+                navigator.geolocation.getCurrentPosition(
+                    // Success callback
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        console.log('Geolocation successful:', lat, lon);
+                        initializeMapAndWeather(lat, lon);
+                    },
+                    // Error callback
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        showErrorMessage("Location access was denied. Using default location.");
+                        initializeMapAndWeather(defaultLat, defaultLon);
+                    },
+                    // Options
+                    { timeout: 5000 }
+                );
+            }
+            
+            // Initialize both map and weather with the obtained coordinates
+            function initializeMapAndWeather(lat, lon) {
+                console.log('Initializing map and weather for coordinates:', lat, lon);
+                
+                // Update coordinates in the UI
+                document.getElementById("latitude").textContent = lat.toFixed(5);
+                document.getElementById("longitude").textContent = lon.toFixed(5);
+                
+                // Initialize map
+                createMap(lat, lon);
+                
+                // Get location name and weather data
+                getLocationName(lat, lon)
+                    .then(locationName => {
+                        document.getElementById("locationName").textContent = locationName || 'Your Location';
+                    })
+                    .catch(err => {
+                        console.error('Error getting location name:', err);
+                        document.getElementById("locationName").textContent = 'Your Location';
+                    });
+                
+                // Get weather data
+                fetchAndDisplayWeather(lat, lon)
+                    .catch(err => {
+                        console.error('Error fetching weather:', err);
+                        showErrorMessage("Weather data unavailable. Using demo data.");
+                        useBackupWeatherData(lat, lon);
+                    });
+            }
+
+            // Display error message
+            function showErrorMessage(message) {
+                document.getElementById('conditionText').textContent = message;
+                document.getElementById('conditionText').style.color = '#ff6b6b';
+            }
+            
+            // Create and initialize the map
+            function createMap(lat, lon) {
+                console.log('Creating map at:', lat, lon);
+                
+                try {
+                    // Remove existing map if any
+                    if (myMap !== null) {
+                        try {
+                            myMap.remove();
+                        } catch (e) {
+                            console.warn('Error removing existing map:', e);
+                        }
+                    }
+                    
+                    // Make sure map container is visible and has proper dimensions
+                    const mapContainer = document.getElementById('map');
+                    if (!mapContainer) {
+                        console.error('Map container not found');
+                        return;
+                    }
+                    
+                    // Reset the container
+                    mapContainer.innerHTML = '';
+                    mapContainer.style.height = '300px';
+                    mapContainer.style.width = '100%';
+                    
+                    // Force redraw of container (helps with map rendering issues)
+                    mapContainer.style.display = 'none';
+                    setTimeout(() => { mapContainer.style.display = 'block'; }, 10);
+                    
+                    // Create new map with a short delay to ensure DOM is ready
+                    setTimeout(() => {
+                        try {
+                            // Create new map
+                            myMap = L.map('map', {
+                                center: [lat, lon],
+                                zoom: 13
+                            });
+                            
+                            // Add OpenStreetMap tile layer
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                                maxZoom: 18
+                            }).addTo(myMap);
+                            
+                            // Add marker for user's location
+                            const userMarker = L.marker([lat, lon]).addTo(myMap);
+                            userMarker.bindPopup('<b>Your Location</b><br>Lat: ' + lat.toFixed(5) + '<br>Lon: ' + lon.toFixed(5));
+                            userMarker.openPopup();
+                            
+                            // Add soil markers
+                            addSoilMarkers(lat, lon);
+                            
+                            // Force map to update its container dimensions multiple times
+                            // This is a known fix for Leaflet rendering issues
+                            for (let i = 1; i <= 5; i++) {
+                                setTimeout(() => {
+                                    if (myMap) myMap.invalidateSize(true);
+                                }, i * 200);
+                            }
+                            
+                            console.log('Map created successfully');
+                        } catch (e) {
+                            console.error('Error in delayed map creation:', e);
+                            mapContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #ff3b30;">Map could not be loaded: ' + e.message + '</div>';
+                        }
+                    }, 100);
+                } catch (error) {
+                    console.error('Error creating map:', error);
+                    document.getElementById('map').innerHTML = '<div style="padding: 20px; text-align: center; color: #ff3b30;">Map could not be loaded: ' + error.message + '</div>';
+                }
+            }
+            
+            // Add soil information markers to the map
+            function addSoilMarkers(lat, lon) {
+                if (!myMap) {
+                    console.error('Cannot add soil markers: map not initialized');
+                    return;
+                }
+                
+                // Sample soil data points (would come from a database in production)
+                const soilPoints = [
+                    { lat: lat + 0.01, lon: lon + 0.01, type: 'Clay Loam', ph: 6.8, fertility: 'Medium-High' },
+                    { lat: lat - 0.01, lon: lon - 0.01, type: 'Sandy Loam', ph: 7.2, fertility: 'Medium' }
+                ];
+                
+                // Add each soil marker to map
+                soilPoints.forEach(point => {
+                    try {
+                        // Plant emoji as custom marker
+                        const soilIcon = L.divIcon({
+                            html: '🌱',
+                            className: 'soil-marker-icon',
+                            iconSize: [30, 30]
+                        });
+                        
+                        // Create marker with popup
+                        const marker = L.marker([point.lat, point.lon], { icon: soilIcon }).addTo(myMap);
+                        marker.bindPopup(
+                            '<div class="soil-popup">' +
+                            '<h4>' + point.type + '</h4>' +
+                            '<p>pH: <strong>' + point.ph + '</strong></p>' +
+                            '<p>Fertility: <strong>' + point.fertility + '</strong></p>' +
+                            '</div>'
+                        );
+                    } catch (error) {
+                        console.error('Error adding soil marker:', error);
+                    }
+                });
+            }
+
+            // Fetch and display weather data
+            async function fetchAndDisplayWeather(lat, lon) {
+                // Show loading state
+                document.getElementById('conditionText').textContent = 'Loading weather data...';
+                
+                try {
+                    // Construct API URLs with the provided key
+                    const currentWeatherUrl = 'https://api.weatherapi.com/v1/current.json?key=' + WEATHER_API_KEY + '&q=' + lat.toFixed(4) + ',' + lon.toFixed(4);
+                    const forecastUrl = 'https://api.weatherapi.com/v1/forecast.json?key=' + WEATHER_API_KEY + '&q=' + lat.toFixed(4) + ',' + lon.toFixed(4) + '&days=5';
+                    
+                    console.log('Fetching weather from API for:', lat.toFixed(4), lon.toFixed(4));
+                    console.log('Current URL:', currentWeatherUrl);
+                    
+                    // Get current weather data
+                    const currentResponse = await fetch(currentWeatherUrl);
+                    if (!currentResponse.ok) {
+                        throw new Error(`Weather API error (${currentResponse.status}): ${currentResponse.statusText}`);
+                    }
+                    const currentData = await currentResponse.json();
+                    console.log('Current weather data received:', currentData);
+                    
+                    // Get forecast data
+                    const forecastResponse = await fetch(forecastUrl);
+                    if (!forecastResponse.ok) {
+                        throw new Error(`Forecast API error (${forecastResponse.status}): ${forecastResponse.statusText}`);
+                    }
+                    const forecastData = await forecastResponse.json();
+                    console.log('Forecast data received:', forecastData);
+                    
+                    // Update the UI with the fetched data
+                    updateCurrentWeather(currentData);
+                    updateForecast(forecastData);
+                } catch (error) {
+                    console.error('Weather API error:', error);
+                    showErrorMessage('Error loading weather: ' + error.message);
+                    useBackupWeatherData(lat, lon);
+                }
+            }
+
+            // Get location name from OpenStreetMap Nominatim
+            async function getLocationName(lat, lon) {
+                try {
+                    console.log('Getting location name for coordinates:', lat, lon);
+                    
+                    // Construct URL with proper formatting
+                    const url = NOMINATIM_API_URL + lat.toFixed(6) + '&lon=' + lon.toFixed(6) + '&addressdetails=1';
+                    console.log('Nominatim URL:', url);
+                    
+                    // Fetch location data
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error('Nominatim API error: ' + response.status);
+                    }
+                    
+                    // Parse response
+                    const data = await response.json();
+                    console.log('Location data received:', data);
+                    
+                    // Extract location name or use meaningful parts
+                    let locationName = data.display_name || "";
+                    if (data.address) {
+                        // Try to create a more readable location name from parts
+                        const parts = [];
+                        if (data.address.city) parts.push(data.address.city);
+                        else if (data.address.town) parts.push(data.address.town);
+                        else if (data.address.village) parts.push(data.address.village);
+                        
+                        if (data.address.state) parts.push(data.address.state);
+                        if (data.address.country) parts.push(data.address.country);
+                        
+                        if (parts.length > 0) {
+                            locationName = parts.join(', ');
+                        }
+                    }
+                    
+                    return locationName || "Your Location";
+                } catch (err) {
+                    console.error("Location name fetch error:", err);
+                    return "Your Location";
+                }
+            }
+
+            // Update current weather display
+            function updateCurrentWeather(data) {
+                if (!data || !data.current) {
+                    showErrorMessage('Invalid weather data received');
+                    return;
+                }
+                
+                const current = data.current;
+                
+                // Update large weather display
+                document.getElementById('tempLarge').textContent = Math.round(current.temp_c);
+                document.getElementById('conditionText').textContent = current.condition.text;
+                document.getElementById('weatherIconLarge').style.backgroundImage = 'url(https:' + current.condition.icon + ')';
+                
+                // Update weather details
+                document.getElementById('humidity').textContent = current.humidity;
+                document.getElementById('wind').textContent = current.wind_kph;
+                document.getElementById('feelsLike').textContent = Math.round(current.feelslike_c);
+                document.getElementById('pressure').textContent = current.pressure_mb;
+                document.getElementById('uv').textContent = current.uv;
+                document.getElementById('visibility').textContent = current.vis_km;
+            }
+            
+            // Update forecast display
+            function updateForecast(data) {
+                if (!data || !data.forecast || !data.forecast.forecastday) {
+                    console.error('Invalid forecast data');
+                    return;
+                }
+                
+                const forecastContainer = document.getElementById('forecastDays');
+                forecastContainer.innerHTML = ''; // Clear loading message
+                
+                data.forecast.forecastday.forEach(day => {
+                    try {
+                        const date = new Date(day.date);
+                        const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                        
+                        const forecastDay = document.createElement('div');
+                        forecastDay.className = 'forecast-day';
+                        
+                        forecastDay.innerHTML = 
+                            '<p><strong>' + formattedDate + '</strong></p>' +
+                            '<img src="https:' + day.day.condition.icon + '" class="weather-icon" alt="' + day.day.condition.text + '" />' +
+                            '<p>' + day.day.condition.text + '</p>' +
+                            '<p>🌡️ ' + Math.round(day.day.maxtemp_c) + '° / ' + Math.round(day.day.mintemp_c) + '°</p>' +
+                            '<p>💧 ' + day.day.avghumidity + '%</p>' +
+                            '<p>🌧️ ' + day.day.daily_chance_of_rain + '%</p>' +
+                            '<p>🌅 ' + day.astro.sunrise + '</p>' +
+                            '<p>🌇 ' + day.astro.sunset + '</p>';
+                        
+                        forecastContainer.appendChild(forecastDay);
+                    } catch (err) {
+                        console.error('Error rendering forecast day:', err);
+                    }
+                });
+            }
+
+            // Use backup weather data if API fails
+            function useBackupWeatherData(lat, lon) {
+                const today = new Date();
+                
+                // Create mock current weather
+                const currentData = {
+                    current: {
+                        temp_c: Math.round(25 + Math.random() * 10),
+                        feelslike_c: Math.round(26 + Math.random() * 8),
+                        humidity: Math.round(60 + Math.random() * 20),
+                        wind_kph: Math.round(5 + Math.random() * 15),
+                        condition: { 
+                            text: "Partly cloudy",
+                            icon: "//cdn.weatherapi.com/weather/64x64/day/116.png"
+                        },
+                        pressure_mb: Math.round(1010 + Math.random() * 10),
+                        uv: Math.round(4 + Math.random() * 4),
+                        vis_km: Math.round(8 + Math.random() * 2)
+                    }
+                };
+                
+                // Create mock forecast
+                const forecastData = {
+                    forecast: {
+                        forecastday: []
+                    }
+                };
+                
+                // Generate 5 days of forecast
+                for (let i = 0; i < 5; i++) {
+                    const forecastDate = new Date(today);
+                    forecastDate.setDate(today.getDate() + i);
+                    
+                    forecastData.forecast.forecastday.push({
+                        date: forecastDate.toISOString().split('T')[0],
+                        day: {
+                            maxtemp_c: Math.round(28 + Math.random() * 8 - i),
+                            mintemp_c: Math.round(18 + Math.random() * 5 - i),
+                            avghumidity: Math.round(55 + Math.random() * 25),
+                            daily_chance_of_rain: Math.round((i * 10) + Math.random() * 30),
+                            condition: {
+                                text: i % 2 === 0 ? "Partly cloudy" : "Sunny",
+                                icon: i % 2 === 0 
+                                    ? "//cdn.weatherapi.com/weather/64x64/day/116.png" 
+                                    : "//cdn.weatherapi.com/weather/64x64/day/113.png"
+                            }
+                        },
+                        astro: {
+                            sunrise: "06:" + (30 + i) + " AM",
+                            sunset: "06:" + (45 + i) + " PM"
+                        }
+                    });
+                }
+                
+                // Update the UI with mock data
+                updateCurrentWeather(currentData);
+                updateForecast(forecastData);
+            }
+        })();
     </script>
+
 </body>
-</html> 
+</html>

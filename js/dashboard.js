@@ -11,6 +11,7 @@ class Dashboard {
         this.loadFarmerDetails();
         this.initializeCharts();
         this.displayBadges();
+        this.displayProfileBadges();
         this.loadMetrics();
         this.displayPracticeRating();
     }
@@ -28,6 +29,7 @@ class Dashboard {
                     <p><strong data-i18n="land_area">Land Area:</strong> ${farmerDetails.landArea || 'Not set'} acres</p>
                     <p><strong data-i18n="farming_type">Farming Type:</strong> ${farmerDetails.farmingType || 'Not set'}</p>
                 </div>
+                <div id="profileBadges"></div>
             `;
         }
     }
@@ -146,6 +148,26 @@ class Dashboard {
                 </div>
             </div>
         `;
+    }
+
+    // Render badges in profile section
+    displayProfileBadges() {
+        if (!window.badgeSystem) return;
+        const badges = window.badgeSystem.getFarmerBadges(this.farmerId);
+        const profileBadgesDiv = document.getElementById('profileBadges');
+        if (!profileBadgesDiv) return;
+        if (!badges || badges.length === 0) {
+            profileBadgesDiv.innerHTML = '<span class="badge no-badge">No badges assigned yet</span>';
+            return;
+        }
+        // Show up to 2 most recent/important badges
+        const sorted = badges.slice().sort((a, b) => new Date(b.awardedAt || 0) - new Date(a.awardedAt || 0));
+        const showBadges = sorted.slice(0, 2);
+        profileBadgesDiv.innerHTML = showBadges.map(badge => `
+            <span class="badge" style="background:${badge.color};color:#fff;margin-right:8px;">
+                <span class="badge-icon">${badge.icon}</span> ${badge.name}
+            </span>
+        `).join('');
     }
 
     createBadgeCard(badge) {
@@ -275,4 +297,13 @@ class Dashboard {
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const dashboard = new Dashboard();
-}); 
+    window.dashboard = dashboard;
+});
+
+// Listen for badge updates and refresh dashboard badges in real-time
+window.addEventListener('badgesUpdated', () => {
+    if (window.dashboard) {
+        window.dashboard.displayProfileBadges();
+        if (window.dashboard.displayBadges) window.dashboard.displayBadges();
+    }
+});

@@ -4,194 +4,400 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Kissan Sarthi</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard-styles.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/assistant.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/visualizationHandler.js"></script>
-    <script src="js/dashboard.js"></script>
 </head>
 <body>
-    <header>
+    <header class="site-header">
         <nav>
-            <div class="logo">
-                <img src="assets/logo.png" alt="Kissan Sarthi Logo">
-                <span>Kissan Sarthi</span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="details.html">Farmer Details</a>
-                <a href="parameters.html">Parameters</a>
-                <a href="dashboard.html" class="active">Dashboard</a>
-                <a href="badge-details.html">Badge Details</a>
-                <a href="language.html">Language</a>
-            </div>
+            <a href="index.html">Home</a>
+            <a href="details.html">Details</a>
+            <a href="parameters.html">Parameters</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="language.html">Language</a>
         </nav>
+        <div id="google_translate_element"></div>
     </header>
 
-    <main>
-        <section class="farmer-details">
-            <h2>Farmer Information</h2>
-            <div id="farmerInfo" class="info-card">
-                <!-- Farmer details will be loaded here -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="logo">Kissan Sarthi</h2>
             </div>
-        </section>
-
-        <section class="metrics">
-            <h2>Key Metrics</h2>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <i class="fas fa-seedling"></i>
-                    <h3>Crop Area</h3>
-                    <p id="cropArea">Loading...</p>
-                </div>
-                <div class="metric-card">
-                    <i class="fas fa-tint"></i>
-                    <h3>Water Usage</h3>
-                    <p id="waterUsage">Loading...</p>
-                </div>
-                <div class="metric-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Yield Estimate</h3>
-                    <p id="yieldEstimate">Loading...</p>
-                </div>
-                <div class="metric-card">
-                    <i class="fas fa-rupee-sign"></i>
-                    <h3>Expected Revenue</h3>
-                    <p id="expectedRevenue">Loading...</p>
-                </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#profile" class="sidebar-link"><i class="fas fa-user"></i> Profile</a>
+                <a href="#parameters" class="sidebar-link"><i class="fas fa-chart-bar"></i> Farming Parameters</a>
+                <a href="#schemes" class="sidebar-link"><i class="fas fa-file-alt"></i> Government Schemes</a>
+                <a href="#market" class="sidebar-link"><i class="fas fa-chart-line"></i> Market Analysis</a>
+                <a href="#kisan-sathi" class="sidebar-link"><i class="fas fa-comment"></i> Kisan Sathi</a>
+                <a href="index.html" class="sidebar-link"><i class="fas fa-arrow-left"></i> Back to Main Site</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
-        </section>
+        </div>
 
-        <section class="practice-rating">
-            <h2>Practice Rating</h2>
-            <div class="rating-card">
-                <div class="rating-score">
-                    <span id="ratingScore">0</span>
-                    <span class="rating-label">/100</span>
-                </div>
-                <div class="rating-feedback" id="ratingFeedback">
-                    <!-- Rating feedback will be loaded here -->
-                </div>
-            </div>
-        </section>
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
 
-        <section class="badges">
-            <h2>Your Badges</h2>
-            <div id="badgesContainer" class="badges-grid">
-                <!-- Badges will be loaded here -->
-            </div>
-        </section>
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1 class="dashboard-title">Farmer Dashboard</h1>
 
-        <script>
-            // Load badges when the page loads
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialize badges
-                const badgeSystem = window.badgeSystem;
-                
-                // Display badges
-                badgeSystem.displayBadges('badgesContainer');
-            });
-        </script>
+            <!-- Farmer Profile Section -->
+            <section id="profile" class="dashboard-card">
+                <div class="card-header profile-header">
+                    <h2 class="card-title">Farmer Profile</h2>
+                    <span class="farmer-id">ID: FARM123456</span>
+                </div>
+                <div class="card-content">
+                    <div class="profile-container">
+                        <div class="profile-image-container">
+                            <img src="assets/farmer-profile.jpg" alt="Rajesh Kumar" class="profile-image">
+                            <div class="profile-badges" id="profileBadges"></div>
+                        </div>
+                        <div class="profile-details">
+                            <h3 class="farmer-name">Rajesh Kumar</h3>
+                            <div class="farmer-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Amritsar, Punjab</span>
+                            </div>
+                            <div class="farmer-contact-info">
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>+91 98765 43210</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>rajesh.kumar@example.com</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>Experience: 15 years</span>
+                                </div>
+                            </div>
+                            <div class="farmer-certifications">
+                                <h4>Certifications</h4>
+                                <div class="certification-badges">
+                                    <span class="certification-badge">Organic Farming</span>
+                                    <span class="certification-badge">Sustainable Agriculture</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <section class="crop-analytics">
-            <h2>Crop Analytics</h2>
-            <div class="chart-grid">
-                <div class="chart-card">
-                    <h3>Yield Estimation</h3>
-                    <canvas id="yield-chart"></canvas>
+            <!-- Farming Parameters Section -->
+            <section id="parameters" class="dashboard-card">
+                <div class="card-header parameters-header">
+                    <h2 class="card-title">Farming Parameters</h2>
                 </div>
-                <div class="chart-card">
-                    <h3>Crop Distribution</h3>
-                    <canvas id="crop-distribution-chart"></canvas>
+                <div class="card-content">
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="crops">
+                                <i class="fas fa-seedling"></i> <span>Crop Types</span>
+                            </button>
+                            <button class="tab-btn" data-tab="land">
+                                <i class="fas fa-mountain"></i> <span>Land Type</span>
+                            </button>
+                            <button class="tab-btn" data-tab="irrigation">
+                                <i class="fas fa-tint"></i> <span>Irrigation Methods</span>
+                            </button>
+                            <button class="tab-btn" data-tab="soil">
+                                <i class="fas fa-layer-group"></i> <span>Soil Types</span>
+                            </button>
+                        </div>
+                        
+                        <div class="tab-content active" id="crops-content">
+                            <div class="tab-header">
+                                <h3>Crop Types</h3>
+                                <p>Distribution of crops across your farmland</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="cropChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="land-content">
+                            <div class="tab-header">
+                                <h3>Land Type</h3>
+                                <p>Distribution of land types in your farm</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="landChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="irrigation-content">
+                            <div class="tab-header">
+                                <h3>Irrigation Methods</h3>
+                                <p>Irrigation methods used across your farmland</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="irrigationChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="soil-content">
+                            <div class="tab-header">
+                                <h3>Soil Types</h3>
+                                <p>Distribution of soil types across your farmland</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="soilChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="irrigation-analytics">
-            <h2>Irrigation Analytics</h2>
-            <div class="chart-grid">
-                <div class="chart-card">
-                    <h3>Water Requirements</h3>
-                    <canvas id="water-requirements-chart"></canvas>
+            <!-- Government Schemes Section -->
+            <section id="schemes" class="dashboard-card">
+                <div class="card-header schemes-header">
+                    <h2 class="card-title">Government Schemes</h2>
                 </div>
-                <div class="chart-card">
-                    <h3>Irrigation Efficiency</h3>
-                    <canvas id="irrigation-efficiency-chart"></canvas>
+                <div class="card-content">
+                    <div class="schemes-filters">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="search" id="scheme-search" placeholder="Search schemes..." class="search-input">
+                        </div>
+                        <div class="filter-container">
+                            <select id="category-filter" class="filter-select">
+                                <option value="all">All Categories</option>
+                                <option value="subsidy">Subsidy</option>
+                                <option value="loan">Loan</option>
+                                <option value="insurance">Insurance</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="schemes-list" id="schemes-list">
+                        <!-- Schemes will be populated by JavaScript -->
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="growth-analytics">
-            <h2>Growth Enhancement</h2>
-            <div class="chart-grid">
-                <div class="chart-card">
-                    <h3>Growth Impact</h3>
-                    <canvas id="growth-impact-chart"></canvas>
+            <!-- Market Analysis Section -->
+            <section id="market" class="dashboard-card">
+                <div class="card-header market-header">
+                    <h2 class="card-title">Market Analysis</h2>
                 </div>
-                <div class="chart-card">
-                    <h3>Resource Utilization</h3>
-                    <canvas id="resource-utilization-chart"></canvas>
+                <div class="card-content">
+                    <div class="market-header-container">
+                        <div class="market-title">
+                            <h3><i class="fas fa-chart-line"></i> Crop Price Trends</h3>
+                            <p>Track market prices for your crops</p>
+                        </div>
+                        <div class="time-range-filter">
+                            <i class="fas fa-calendar"></i>
+                            <select id="time-range" class="time-range-select">
+                                <option value="month">Last Month</option>
+                                <option value="quarter">Last Quarter</option>
+                                <option value="year">Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="price-cards">
+                        <div class="price-card wheat-card">
+                            <div class="price-card-content">
+                                <div class="crop-name">Wheat</div>
+                                <div class="price-info">
+                                    <div class="current-price">₹2,350</div>
+                                    <div class="price-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>2.17%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="price-card rice-card">
+                            <div class="price-card-content">
+                                <div class="crop-name">Rice</div>
+                                <div class="price-info">
+                                    <div class="current-price">₹3,050</div>
+                                    <div class="price-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>1.67%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="price-card maize-card">
+                            <div class="price-card-content">
+                                <div class="crop-name">Maize</div>
+                                <div class="price-info">
+                                    <div class="current-price">₹2,150</div>
+                                    <div class="price-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>2.38%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="price-card pulses-card">
+                            <div class="price-card-content">
+                                <div class="crop-name">Pulses</div>
+                                <div class="price-info">
+                                    <div class="current-price">₹6,600</div>
+                                    <div class="price-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>1.54%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="market-tabs-container">
+                        <div class="market-tabs">
+                            <button class="market-tab-btn active" data-crop="wheat">Wheat</button>
+                            <button class="market-tab-btn" data-crop="rice">Rice</button>
+                            <button class="market-tab-btn" data-crop="maize">Maize</button>
+                            <button class="market-tab-btn" data-crop="pulses">Pulses</button>
+                        </div>
+                        
+                        <div class="market-tab-content active" id="wheat-content">
+                            <div class="market-chart-header">
+                                <h3>Wheat Price Trend</h3>
+                                <div class="price-unit">Price per quintal (₹)</div>
+                            </div>
+                            <div class="market-chart-container">
+                                <canvas id="wheatChart"></canvas>
+                            </div>
+                            <div class="market-insights">
+                                <h4>Market Insights</h4>
+                                <p>Wheat prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="market-tab-content" id="rice-content">
+                            <div class="market-chart-header">
+                                <h3>Rice Price Trend</h3>
+                                <div class="price-unit">Price per quintal (₹)</div>
+                            </div>
+                            <div class="market-chart-container">
+                                <canvas id="riceChart"></canvas>
+                            </div>
+                            <div class="market-insights">
+                                <h4>Market Insights</h4>
+                                <p>Rice prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="market-tab-content" id="maize-content">
+                            <div class="market-chart-header">
+                                <h3>Maize Price Trend</h3>
+                                <div class="price-unit">Price per quintal (₹)</div>
+                            </div>
+                            <div class="market-chart-container">
+                                <canvas id="maizeChart"></canvas>
+                            </div>
+                            <div class="market-insights">
+                                <h4>Market Insights</h4>
+                                <p>Maize prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="market-tab-content" id="pulses-content">
+                            <div class="market-chart-header">
+                                <h3>Pulses Price Trend</h3>
+                                <div class="price-unit">Price per quintal (₹)</div>
+                            </div>
+                            <div class="market-chart-container">
+                                <canvas id="pulsesChart"></canvas>
+                            </div>
+                            <div class="market-insights">
+                                <h4>Market Insights</h4>
+                                <p>Pulses prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="market-analytics">
-            <h2>Market Analysis</h2>
-            <div class="chart-grid">
-                <div class="chart-card">
-                    <h3>Market Trends</h3>
-                    <canvas id="market-trends-chart"></canvas>
+            <!-- Kisan Sathi AI Assistant Section -->
+            <section id="kisan-sathi" class="dashboard-card">
+                <div class="card-header assistant-header">
+                    <h2 class="card-title"><i class="fas fa-robot"></i> Kisan Sathi AI Assistant</h2>
                 </div>
-                <div class="chart-card">
-                    <h3>Price Predictions</h3>
-                    <canvas id="price-predictions-chart"></canvas>
+                <div class="card-content assistant-content">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message assistant-message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    Hello! I'm Kisan Sathi, your personal farming assistant. How can I help you today?
+                                </div>
+                            </div>
+                            <!-- More messages will be added by JavaScript -->
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <div class="chat-controls">
+                                <button id="voice-btn" class="control-btn">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                                <button id="speak-btn" class="control-btn">
+                                    <i class="fas fa-volume-mute"></i>
+                                </button>
+                                <button id="clear-chat-btn" class="control-btn">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <div id="recording-status" class="recording-status"></div>
+                            </div>
+                            
+                            <div class="message-input-container">
+                                <textarea id="message-input" class="message-input" placeholder="Ask me anything about farming..."></textarea>
+                                <button id="send-message-btn" class="send-btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <footer>
         <p>&copy; 2024 Kissan Sarthi. All rights reserved.</p>
     </footer>
 
+    <!-- Google Translate script -->
     <script>
-        // Initialize dashboard when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize visualizations
-            window.visualizationHandler.initializeVisualizations();
-            
-            // Load farmer details
-            const farmerDetails = JSON.parse(localStorage.getItem('farmerDetails')) || {};
-            const farmerInfo = document.getElementById('farmerInfo');
-            if (farmerInfo) {
-                farmerInfo.innerHTML = `
-                    <p><strong>Name:</strong> ${farmerDetails.fullName || 'Not provided'}</p>
-                    <p><strong>Phone:</strong> ${farmerDetails.phone || 'Not provided'}</p>
-                    <p><strong>Address:</strong> ${farmerDetails.address || 'Not provided'}</p>
-                    <p><strong>Experience:</strong> ${farmerDetails.experience || '0'} years</p>
-                `;
-            }
-
-            // Load metrics
-            const parameters = JSON.parse(localStorage.getItem('farmParameters')) || {};
-            document.getElementById('cropArea').textContent = `${parameters.cropArea || 0} acres`;
-            document.getElementById('waterUsage').textContent = `${parameters.waterSource || 'Not specified'}`;
-            document.getElementById('yieldEstimate').textContent = `${parameters.expectedYield || 0} quintals`;
-            document.getElementById('expectedRevenue').textContent = `₹${parameters.expectedRevenue || 0}`;
-
-            // Load badges
-            const badges = JSON.parse(localStorage.getItem('badges')) || [];
-            const badgesContainer = document.getElementById('badgesContainer');
-            if (badgesContainer) {
-                badgesContainer.innerHTML = badges.map(badge => `
-                    <div class="badge-card">
-                        <i class="${badge.icon}"></i>
-                        <h3>${badge.name}</h3>
-                        <p>${badge.description}</p>
-                    </div>
-                `).join('') || '<p>No badges earned yet</p>';
-            }
-        });
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,mr,gu,bn,ta,te,ml,kn,pa,ur',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
     </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <!-- Dashboard scripts -->
+    <script src="js/dashboard-main.js"></script>
+    <script src="js/dashboard-charts.js"></script>
+    <script src="js/dashboard-schemes.js"></script>
+    <script src="js/franc-min.js"></script>
+<script src="js/dashboard-assistant.js"></script>
+    
+    <!-- Gemini API integration -->
+    <script src="js/gemini-api.js"></script>
+    <script src="js/gemini-assistant-integration.js"></script>
 </body>
-</html> 
+</html>

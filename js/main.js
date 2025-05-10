@@ -199,7 +199,12 @@ function setupEventListeners() {
 
 // Language Management
 function initializeLanguage() {
-    const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    const supportedLanguages = ['en', 'hi', 'bn', 'mr', 'gu', 'pa', 'ta', 'te', 'kn', 'ml', 'or']; // add more as needed
+    let savedLanguage = localStorage.getItem('preferredLanguage');
+    if (!savedLanguage || !supportedLanguages.includes(savedLanguage)) {
+        savedLanguage = 'en';
+        localStorage.setItem('preferredLanguage', 'en');
+    }
     setLanguage(savedLanguage);
 }
 
