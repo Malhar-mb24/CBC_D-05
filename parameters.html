@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- Add Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Add our custom scripts -->
+    <script src="js/badges.js"></script>
+    <script src="js/parameters.js"></script>
 </head>
 <body>
     <header>
@@ -127,6 +132,73 @@
                     </div>
                 </section>
 
+                <section class="parameter-section">
+                    <h2>Farmer Grading</h2>
+                    <div class="parameter-cards">
+                        <div class="parameter-card">
+                            <label for="soilType">Soil Type</label>
+                            <select id="soilType" name="soilType" required>
+                                <option value="">Select Type</option>
+                                <option value="sandy">Sandy</option>
+                                <option value="clay">Clay</option>
+                                <option value="loam">Loam</option>
+                            </select>
+                        </div>
+                        <div class="parameter-card">
+                            <label for="waterAccess">Access to Water/Irrigation</label>
+                            <select id="waterAccess" name="waterAccess" required>
+                                <option value="">Select Access</option>
+                                <option value="regular">Regular</option>
+                                <option value="occasional">Occasional</option>
+                                <option value="rainfed">Rain-fed only</option>
+                            </select>
+                        </div>
+                        <div class="parameter-card">
+                            <label for="fertilizerUsage">Fertilizer Usage</label>
+                            <select id="fertilizerUsage" name="fertilizerUsage" required>
+                                <option value="">Select Usage</option>
+                                <option value="organic">Organic</option>
+                                <option value="chemical">Chemical</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                        <div class="parameter-card">
+                            <label for="pestManagement">Pest Management Practice</label>
+                            <select id="pestManagement" name="pestManagement" required>
+                                <option value="">Select Practice</option>
+                                <option value="organic">Organic</option>
+                                <option value="chemical">Chemical</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                        <div class="parameter-card">
+                            <label for="cropRotation">Crop Rotation Practice</label>
+                            <select id="cropRotation" name="cropRotation" required>
+                                <option value="">Select Practice</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="gradingResult" class="grading-result" style="display: none;">
+                        <div class="badge-container">
+                            <div id="badgeIcon" class="badge-icon"></div>
+                            <div class="badge-info">
+                                <h3 id="badgeTitle"></h3>
+                                <p id="badgeDescription"></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Add Badge Display Section -->
+                <section class="parameter-section">
+                    <h2>Your Badges</h2>
+                    <div id="badgesContainer" class="badges-container">
+                        <!-- Badges will be dynamically added here -->
+                    </div>
+                </section>
+
                 <div class="form-actions">
                     <button type="submit" class="btn">Save & View Dashboard</button>
                 </div>
@@ -182,6 +254,9 @@
                     }
                 });
             }
+
+            // Display existing badges
+            displayBadges();
         });
 
         // Handle form submission
@@ -189,7 +264,16 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
+            
+            // Save parameters
             localStorage.setItem('farmParameters', JSON.stringify(data));
+            
+            // Check and award badges
+            const selections = Object.values(data);
+            badgeSystem.checkAndAwardBadges('parameters', selections);
+            
+            // Display updated badges
+            displayBadges();
             
             // Add transition effect
             document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
@@ -197,6 +281,29 @@
                 window.location.href = 'dashboard.html';
             }, 300);
         });
+
+        // Function to display badges
+        function displayBadges() {
+            const badgesContainer = document.getElementById('badgesContainer');
+            const farmerId = localStorage.getItem('currentFarmerId') || 'default';
+            const badges = badgeSystem.getFarmerBadges(farmerId);
+
+            if (badges.length === 0) {
+                badgesContainer.innerHTML = '<p class="no-badges">No badges earned yet. Complete more parameters to earn badges!</p>';
+                return;
+            }
+
+            badgesContainer.innerHTML = badges.map(badge => `
+                <div class="badge-card" style="border-left: 4px solid ${badge.color}">
+                    <div class="badge-icon">${badge.icon}</div>
+                    <div class="badge-info">
+                        <h3>${badge.name}</h3>
+                        <p>${badge.description}</p>
+                        <small>Awarded on ${new Date(badge.awardedAt).toLocaleDateString()}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         // Handle language change
         function changeLanguage(lang) {
@@ -232,16 +339,103 @@
             });
         });
 
-        // Form validation
-        const inputs = document.querySelectorAll('input, select');
-        inputs.forEach(input => {
-            input.addEventListener('change', () => {
-                if (input.validity.valid) {
-                    input.classList.remove('invalid');
-                } else {
-                    input.classList.add('invalid');
-                }
+        // Farmer Grading Logic
+        const gradingInputs = [
+            'soilType',
+            'waterAccess',
+            'fertilizerUsage',
+            'pestManagement',
+            'cropRotation'
+        ];
+
+        function calculateGrade() {
+            const values = {
+                soilType: document.getElementById('soilType').value,
+                waterAccess: document.getElementById('waterAccess').value,
+                fertilizerUsage: document.getElementById('fertilizerUsage').value,
+                pestManagement: document.getElementById('pestManagement').value,
+                cropRotation: document.getElementById('cropRotation').value
+            };
+
+            // Check if all fields are filled
+            if (Object.values(values).some(value => !value)) {
+                return;
+            }
+
+            // Count optimal factors
+            let optimalCount = 0;
+            if (values.soilType === 'loam') optimalCount++;
+            if (values.waterAccess === 'regular') optimalCount++;
+            if (values.fertilizerUsage === 'organic') optimalCount++;
+            if (values.pestManagement === 'organic') optimalCount++;
+            if (values.cropRotation === 'yes') optimalCount++;
+
+            // Determine badge
+            let badge = {
+                color: '',
+                title: '',
+                description: '',
+                icon: ''
+            };
+
+            if (optimalCount === 5) {
+                badge = {
+                    color: 'blue',
+                    title: 'Blue Badge',
+                    description: 'Excellent! All factors are optimal. You are following the best farming practices.',
+                    icon: '🏆'
+                };
+            } else if (optimalCount >= 3) {
+                badge = {
+                    color: 'green',
+                    title: 'Green Badge',
+                    description: 'Good! Most factors are optimal. Keep working on improving the remaining factors.',
+                    icon: '🌱'
+                };
+            } else if (optimalCount === 2) {
+                badge = {
+                    color: 'black',
+                    title: 'Black Badge',
+                    description: 'Fair. Some factors need improvement. Consider adopting more sustainable practices.',
+                    icon: '⚫'
+                };
+            } else {
+                badge = {
+                    color: 'red',
+                    title: 'Red Badge',
+                    description: 'Needs improvement. Most factors need attention. Consider consulting with agricultural experts.',
+                    icon: '⚠️'
+                };
+            }
+
+            // Update UI
+            const resultDiv = document.getElementById('gradingResult');
+            const badgeIcon = document.getElementById('badgeIcon');
+            const badgeTitle = document.getElementById('badgeTitle');
+            const badgeDescription = document.getElementById('badgeDescription');
+
+            badgeIcon.className = `badge-icon badge-${badge.color}`;
+            badgeIcon.textContent = badge.icon;
+            badgeTitle.textContent = badge.title;
+            badgeDescription.textContent = badge.description;
+            resultDiv.style.display = 'block';
+        }
+
+        // Add event listeners for grading inputs
+        gradingInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            input.addEventListener('change', calculateGrade);
+        });
+
+        // Calculate grade on page load if all inputs are filled
+        document.addEventListener('DOMContentLoaded', () => {
+            const allFilled = gradingInputs.every(inputId => {
+                const input = document.getElementById(inputId);
+                return input && input.value;
             });
+            if (allFilled) {
+                calculateGrade();
+            }
         });
     </script>
 </body>

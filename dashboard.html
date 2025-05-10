@@ -4,27 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Kissan Sarthi</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/dataProcessor.js"></script>
     <script src="js/visualizationHandler.js"></script>
+    <script src="js/dashboard.js"></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="details.html">Details</a>
-            <a href="parameters.html">Parameters</a>
-            <a href="dashboard.html" class="active">Dashboard</a>
+            <div class="logo">
+                <img src="assets/logo.png" alt="Kissan Sarthi Logo">
+                <span>Kissan Sarthi</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="details.html">Farmer Details</a>
+                <a href="parameters.html">Parameters</a>
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="language.html">Language</a>
+            </div>
         </nav>
-        <div id="google_translate_element"></div>
     </header>
 
-    <main class="dashboard-container">
-        <h1>Farmer Dashboard</h1>
+    <main>
+        <section class="farmer-details">
+            <h2>Farmer Information</h2>
+            <div id="farmerInfo" class="info-card">
+                <!-- Farmer details will be loaded here -->
+            </div>
+        </section>
 
-        <!-- Crop Analytics Section -->
-        <section class="chart-section">
+        <section class="metrics">
+            <h2>Key Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <i class="fas fa-seedling"></i>
+                    <h3>Crop Area</h3>
+                    <p id="cropArea">Loading...</p>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-tint"></i>
+                    <h3>Water Usage</h3>
+                    <p id="waterUsage">Loading...</p>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Yield Estimate</h3>
+                    <p id="yieldEstimate">Loading...</p>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-rupee-sign"></i>
+                    <h3>Expected Revenue</h3>
+                    <p id="expectedRevenue">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="practice-rating">
+            <h2>Practice Rating</h2>
+            <div class="rating-card">
+                <div class="rating-score">
+                    <span id="ratingScore">0</span>
+                    <span class="rating-label">/100</span>
+                </div>
+                <div class="rating-feedback" id="ratingFeedback">
+                    <!-- Rating feedback will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <section class="badges">
+            <h2>Your Badges</h2>
+            <div id="badgesContainer" class="badges-grid">
+                <!-- Badges will be loaded here -->
+            </div>
+        </section>
+
+        <section class="crop-analytics">
             <h2>Crop Analytics</h2>
             <div class="chart-grid">
                 <div class="chart-card">
@@ -38,8 +95,7 @@
             </div>
         </section>
 
-        <!-- Irrigation Analytics Section -->
-        <section class="chart-section">
+        <section class="irrigation-analytics">
             <h2>Irrigation Analytics</h2>
             <div class="chart-grid">
                 <div class="chart-card">
@@ -53,12 +109,11 @@
             </div>
         </section>
 
-        <!-- Growth Enhancement Section -->
-        <section class="chart-section">
+        <section class="growth-analytics">
             <h2>Growth Enhancement</h2>
             <div class="chart-grid">
                 <div class="chart-card">
-                    <h3>Growth Impact Analysis</h3>
+                    <h3>Growth Impact</h3>
                     <canvas id="growth-impact-chart"></canvas>
                 </div>
                 <div class="chart-card">
@@ -68,8 +123,7 @@
             </div>
         </section>
 
-        <!-- Market Analysis Section -->
-        <section class="chart-section">
+        <section class="market-analytics">
             <h2>Market Analysis</h2>
             <div class="chart-grid">
                 <div class="chart-card">
@@ -89,20 +143,43 @@
     </footer>
 
     <script>
-        // Initialize visualizations when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
+        // Initialize dashboard when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize visualizations
             window.visualizationHandler.initializeVisualizations();
-        });
+            
+            // Load farmer details
+            const farmerDetails = JSON.parse(localStorage.getItem('farmerDetails')) || {};
+            const farmerInfo = document.getElementById('farmerInfo');
+            if (farmerInfo) {
+                farmerInfo.innerHTML = `
+                    <p><strong>Name:</strong> ${farmerDetails.fullName || 'Not provided'}</p>
+                    <p><strong>Phone:</strong> ${farmerDetails.phone || 'Not provided'}</p>
+                    <p><strong>Address:</strong> ${farmerDetails.address || 'Not provided'}</p>
+                    <p><strong>Experience:</strong> ${farmerDetails.experience || '0'} years</p>
+                `;
+            }
 
-        // Add Google Translate script
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,hi,mr,gu,bn,ta,te,ml,kn,pa,ur',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
+            // Load metrics
+            const parameters = JSON.parse(localStorage.getItem('farmParameters')) || {};
+            document.getElementById('cropArea').textContent = `${parameters.cropArea || 0} acres`;
+            document.getElementById('waterUsage').textContent = `${parameters.waterSource || 'Not specified'}`;
+            document.getElementById('yieldEstimate').textContent = `${parameters.expectedYield || 0} quintals`;
+            document.getElementById('expectedRevenue').textContent = `₹${parameters.expectedRevenue || 0}`;
+
+            // Load badges
+            const badges = JSON.parse(localStorage.getItem('badges')) || [];
+            const badgesContainer = document.getElementById('badgesContainer');
+            if (badgesContainer) {
+                badgesContainer.innerHTML = badges.map(badge => `
+                    <div class="badge-card">
+                        <i class="${badge.icon}"></i>
+                        <h3>${badge.name}</h3>
+                        <p>${badge.description}</p>
+                    </div>
+                `).join('') || '<p>No badges earned yet</p>';
+            }
+        });
     </script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html> 
