@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm Parameters - Kissan Sarthi</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/crop-selection.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/translate.js"></script>
 </head>
 <body>
     <header>
@@ -19,21 +21,7 @@
                 <a href="details.html">Details</a>
                 <a href="parameters.html" class="active">Parameters</a>
                 <a href="dashboard.html">Dashboard</a>
-                <div class="language-switcher">
-                    <select id="language-select" onchange="changeLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी</option>
-                        <option value="mr">मराठी</option>
-                        <option value="gu">ગુજરાતી</option>
-                        <option value="bn">বাংলা</option>
-                        <option value="ta">தமிழ்</option>
-                        <option value="te">తెలుగు</option>
-                        <option value="ml">മലയാളം</option>
-                        <option value="kn">ಕನ್ನಡ</option>
-                        <option value="pa">ਪੰਜਾਬੀ</option>
-                        <option value="ur">اردو</option>
-                    </select>
-                </div>
+
             </div>
         </nav>
         <div id="google_translate_element"></div>
@@ -46,20 +34,54 @@
                 <section class="parameter-section">
                     <h2>Crop Selection</h2>
                     <div class="parameter-cards">
-                        <div class="parameter-card">
-                            <label for="cropArea">Total Crop Area (acres)</label>
-                            <input type="number" id="cropArea" name="cropArea" min="0" step="0.1" required>
+                        <div class="parameter-card number-input-container">
+                            <label>Total Crop Area (acres)</label>
+                            <div class="number-selection">
+                                <div class="number-display">0</div>
+                                <div class="number-control">
+                                    <button type="button" class="number-btn increment">+</button>
+                                    <button type="button" class="number-btn decrement">-</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="cropArea" name="cropArea" value="0" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="cropType">Primary Crop</label>
-                            <select id="cropType" name="cropType" required>
-                                <option value="">Select Crop</option>
-                                <option value="wheat">Wheat</option>
-                                <option value="rice">Rice</option>
-                                <option value="corn">Corn</option>
-                                <option value="sugarcane">Sugarcane</option>
-                                <option value="cotton">Cotton</option>
-                            </select>
+                        <div class="parameter-card crop-selection-container">
+                            <label>Select Crops (click to select multiple)</label>
+                            <div class="crop-grid">
+                                <div class="crop-item" data-value="wheat">
+                                    <div class="crop-icon">🌾</div>
+                                    <span>Wheat</span>
+                                </div>
+                                <div class="crop-item" data-value="rice">
+                                    <div class="crop-icon">🍚</div>
+                                    <span>Rice</span>
+                                </div>
+                                <div class="crop-item" data-value="corn">
+                                    <div class="crop-icon">🌽</div>
+                                    <span>Corn</span>
+                                </div>
+                                <div class="crop-item" data-value="sugarcane">
+                                    <div class="crop-icon">🍯</div>
+                                    <span>Sugarcane</span>
+                                </div>
+                                <div class="crop-item" data-value="cotton">
+                                    <div class="crop-icon">☁️</div>
+                                    <span>Cotton</span>
+                                </div>
+                                <div class="crop-item" data-value="soybean">
+                                    <div class="crop-icon">🌱</div>
+                                    <span>Soybean</span>
+                                </div>
+                                <div class="crop-item" data-value="potato">
+                                    <div class="crop-icon">🥔</div>
+                                    <span>Potato</span>
+                                </div>
+                                <div class="crop-item" data-value="tomato">
+                                    <div class="crop-icon">🍅</div>
+                                    <span>Tomato</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="selectedCrops" name="selectedCrops" required>
                         </div>
                     </div>
                 </section>
@@ -67,24 +89,45 @@
                 <section class="parameter-section">
                     <h2>Irrigation Methods</h2>
                     <div class="parameter-cards">
-                        <div class="parameter-card">
-                            <label for="irrigationType">Irrigation Type</label>
-                            <select id="irrigationType" name="irrigationType" required>
-                                <option value="">Select Type</option>
-                                <option value="drip">Drip Irrigation</option>
-                                <option value="sprinkler">Sprinkler System</option>
-                                <option value="flood">Flood Irrigation</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Irrigation Type</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="drip">
+                                    <div class="selection-icon">💧</div>
+                                    <span>Drip Irrigation</span>
+                                </div>
+                                <div class="selection-item" data-value="sprinkler">
+                                    <div class="selection-icon">🚿</div>
+                                    <span>Sprinkler System</span>
+                                </div>
+                                <div class="selection-item" data-value="flood">
+                                    <div class="selection-icon">🌊</div>
+                                    <span>Flood Irrigation</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="irrigationType" name="irrigationType" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="waterSource">Water Source</label>
-                            <select id="waterSource" name="waterSource" required>
-                                <option value="">Select Source</option>
-                                <option value="well">Well</option>
-                                <option value="canal">Canal</option>
-                                <option value="river">River</option>
-                                <option value="rain">Rain-fed</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Water Source</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="well">
+                                    <div class="selection-icon">⛲️</div>
+                                    <span>Well</span>
+                                </div>
+                                <div class="selection-item" data-value="canal">
+                                    <div class="selection-icon">🛣️</div>
+                                    <span>Canal</span>
+                                </div>
+                                <div class="selection-item" data-value="river">
+                                    <div class="selection-icon">🌊</div>
+                                    <span>River</span>
+                                </div>
+                                <div class="selection-item" data-value="rain">
+                                    <div class="selection-icon">🌧️</div>
+                                    <span>Rain-fed</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="waterSource" name="waterSource" required>
                         </div>
                     </div>
                 </section>
@@ -92,23 +135,41 @@
                 <section class="parameter-section">
                     <h2>Growth Enhancement</h2>
                     <div class="parameter-cards">
-                        <div class="parameter-card">
-                            <label for="fertilizerType">Fertilizer Type</label>
-                            <select id="fertilizerType" name="fertilizerType" required>
-                                <option value="">Select Type</option>
-                                <option value="organic">Organic</option>
-                                <option value="chemical">Chemical</option>
-                                <option value="mixed">Mixed</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Fertilizer Type</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="organic">
+                                    <div class="selection-icon">🌱</div>
+                                    <span>Organic</span>
+                                </div>
+                                <div class="selection-item" data-value="chemical">
+                                    <div class="selection-icon">🧪</div>
+                                    <span>Chemical</span>
+                                </div>
+                                <div class="selection-item" data-value="mixed">
+                                    <div class="selection-icon">🧬</div>
+                                    <span>Mixed</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="fertilizerType" name="fertilizerType" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="pestControl">Pest Control Method</label>
-                            <select id="pestControl" name="pestControl" required>
-                                <option value="">Select Method</option>
-                                <option value="organic">Organic</option>
-                                <option value="chemical">Chemical</option>
-                                <option value="biological">Biological</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Pest Control Method</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="organic">
+                                    <div class="selection-icon">🌿</div>
+                                    <span>Organic</span>
+                                </div>
+                                <div class="selection-item" data-value="chemical">
+                                    <div class="selection-icon">🔮</div>
+                                    <span>Chemical</span>
+                                </div>
+                                <div class="selection-item" data-value="biological">
+                                    <div class="selection-icon">🪲</div>
+                                    <span>Biological</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="pestControl" name="pestControl" required>
                         </div>
                     </div>
                 </section>
@@ -116,13 +177,27 @@
                 <section class="parameter-section">
                     <h2>Market Analysis</h2>
                     <div class="parameter-cards">
-                        <div class="parameter-card">
-                            <label for="targetPrice">Target Price (₹/quintal)</label>
-                            <input type="number" id="targetPrice" name="targetPrice" min="0" required>
+                        <div class="parameter-card number-input-container">
+                            <label>Target Price (₹/quintal)</label>
+                            <div class="number-selection">
+                                <div class="number-display">0</div>
+                                <div class="number-control">
+                                    <button type="button" class="number-btn increment">+</button>
+                                    <button type="button" class="number-btn decrement">-</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="targetPrice" name="targetPrice" value="0" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="marketDistance">Distance to Market (km)</label>
-                            <input type="number" id="marketDistance" name="marketDistance" min="0" required>
+                        <div class="parameter-card number-input-container">
+                            <label>Distance to Market (km)</label>
+                            <div class="number-selection">
+                                <div class="number-display">0</div>
+                                <div class="number-control">
+                                    <button type="button" class="number-btn increment">+</button>
+                                    <button type="button" class="number-btn decrement">-</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="marketDistance" name="marketDistance" value="0" required>
                         </div>
                     </div>
                 </section>
@@ -130,49 +205,91 @@
                 <section class="parameter-section">
                     <h2>Farmer Grading</h2>
                     <div class="parameter-cards">
-                        <div class="parameter-card">
-                            <label for="soilType">Soil Type</label>
-                            <select id="soilType" name="soilType" required>
-                                <option value="">Select Type</option>
-                                <option value="sandy">Sandy</option>
-                                <option value="clay">Clay</option>
-                                <option value="loam">Loam</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Soil Type</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="sandy">
+                                    <div class="selection-icon">🏖️</div>
+                                    <span>Sandy</span>
+                                </div>
+                                <div class="selection-item" data-value="clay">
+                                    <div class="selection-icon">🧱</div>
+                                    <span>Clay</span>
+                                </div>
+                                <div class="selection-item" data-value="loam">
+                                    <div class="selection-icon">🟤</div>
+                                    <span>Loam</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="soilType" name="soilType" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="waterAccess">Access to Water/Irrigation</label>
-                            <select id="waterAccess" name="waterAccess" required>
-                                <option value="">Select Access</option>
-                                <option value="regular">Regular</option>
-                                <option value="occasional">Occasional</option>
-                                <option value="rainfed">Rain-fed only</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Access to Water/Irrigation</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="regular">
+                                    <div class="selection-icon">💦</div>
+                                    <span>Regular</span>
+                                </div>
+                                <div class="selection-item" data-value="occasional">
+                                    <div class="selection-icon">🔶</div>
+                                    <span>Occasional</span>
+                                </div>
+                                <div class="selection-item" data-value="rainfed">
+                                    <div class="selection-icon">☔️</div>
+                                    <span>Rain-fed only</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="waterAccess" name="waterAccess" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="fertilizerUsage">Fertilizer Usage</label>
-                            <select id="fertilizerUsage" name="fertilizerUsage" required>
-                                <option value="">Select Usage</option>
-                                <option value="organic">Organic</option>
-                                <option value="chemical">Chemical</option>
-                                <option value="none">None</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Fertilizer Usage</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="organic">
+                                    <div class="selection-icon">🌻</div>
+                                    <span>Organic</span>
+                                </div>
+                                <div class="selection-item" data-value="chemical">
+                                    <div class="selection-icon">🔬</div>
+                                    <span>Chemical</span>
+                                </div>
+                                <div class="selection-item" data-value="none">
+                                    <div class="selection-icon">❌</div>
+                                    <span>None</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="fertilizerUsage" name="fertilizerUsage" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="pestManagement">Pest Management Practice</label>
-                            <select id="pestManagement" name="pestManagement" required>
-                                <option value="">Select Practice</option>
-                                <option value="organic">Organic</option>
-                                <option value="chemical">Chemical</option>
-                                <option value="none">None</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Pest Management Practice</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="organic">
+                                    <div class="selection-icon">🥦</div>
+                                    <span>Organic</span>
+                                </div>
+                                <div class="selection-item" data-value="chemical">
+                                    <div class="selection-icon">💨</div>
+                                    <span>Chemical</span>
+                                </div>
+                                <div class="selection-item" data-value="none">
+                                    <div class="selection-icon">⛔</div>
+                                    <span>None</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="pestManagement" name="pestManagement" required>
                         </div>
-                        <div class="parameter-card">
-                            <label for="cropRotation">Crop Rotation Practice</label>
-                            <select id="cropRotation" name="cropRotation" required>
-                                <option value="">Select Practice</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
+                        <div class="parameter-card selection-container">
+                            <label>Crop Rotation Practice</label>
+                            <div class="selection-grid">
+                                <div class="selection-item" data-value="yes">
+                                    <div class="selection-icon">♻️</div>
+                                    <span>Yes</span>
+                                </div>
+                                <div class="selection-item" data-value="no">
+                                    <div class="selection-icon">✖️</div>
+                                    <span>No</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="cropRotation" name="cropRotation" required>
                         </div>
                     </div>
                     <div id="gradingResult" class="grading-result" style="display: none;">
@@ -229,32 +346,6 @@
                     select.dispatchEvent(new Event('change'));
                 }
             }
-
-            // Load saved parameters if they exist
-            const savedParameters = localStorage.getItem('farmParameters');
-            if (savedParameters) {
-                const parameters = JSON.parse(savedParameters);
-                Object.keys(parameters).forEach(key => {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.value = parameters[key];
-                    }
-                });
-            }
-        });
-
-        // Handle form submission
-        document.getElementById('parameterForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            localStorage.setItem('farmParameters', JSON.stringify(data));
-            
-            // Add transition effect
-            document.body.style.animation = 'fadeOut 0.3s ease-out forwards';
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 300);
         });
 
         // Handle language change
@@ -402,5 +493,6 @@
             }
         });
     </script>
+    <script src="js/crop-selection.js"></script>
 </body>
 </html> 

@@ -1,0 +1,105 @@
+/* Optimized Selection Styles */
+.selection-container, .crop-selection-container {
+    width: 100%;
+}
+
+.selection-grid, .crop-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+    will-change: transform; /* Optimize for animations */
+}
+
+.selection-item, .crop-item {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    /* Use transform instead of box-shadow for better performance */
+    transform: translateZ(0); /* Hardware acceleration */
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.selection-item:hover, .crop-item:hover {
+    transform: translateY(-3px);
+}
+
+.selection-item.selected, .crop-item.selected {
+    border-color: #13a538;
+    background-color: rgba(19, 165, 56, 0.1);
+}
+
+.selection-icon, .crop-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selection-item span, .crop-item span {
+    display: block;
+    font-weight: 500;
+}
+
+/* Number input styles */
+.number-selection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.number-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    flex: 1;
+    text-align: center;
+}
+
+.number-control {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.number-btn {
+    background-color: #13a538;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px 0;
+}
+
+.number-btn:hover {
+    background-color: #0e8a2e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .crop-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .crop-grid {
+        grid-template-columns: 1fr;
+    }
+}

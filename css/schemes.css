@@ -1,0 +1,593 @@
+/* Government Schemes Styles */
+
+/* Farmer Eligibility Summary */
+.farmer-eligibility-summary {
+    display: flex;
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.farmer-profile-snapshot {
+    flex: 3;
+    min-width: 300px;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1.25rem;
+}
+
+.profile-snapshot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.profile-snapshot-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+.profile-snapshot-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.profile-snapshot-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.snapshot-label {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.snapshot-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.eligibility-stats {
+    flex: 2;
+    min-width: 250px;
+    display: flex;
+    gap: 1rem;
+}
+
+.eligibility-stat-item {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #10b981;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.schemes-filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.search-container {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+}
+
+.filter-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-select {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+    font-size: 0.9rem;
+    min-width: 150px;
+}
+
+.schemes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.scheme-card {
+    background-color: #fff;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.scheme-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scheme-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.scheme-icon {
+    width: 3rem;
+    height: 3rem;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #4b5563;
+}
+
+.scheme-icon.subsidy {
+    background-color: #dcfce7;
+    color: #10b981;
+}
+
+.scheme-icon.loan {
+    background-color: #dbeafe;
+    color: #3b82f6;
+}
+
+.scheme-icon.insurance {
+    background-color: #fef3c7;
+    color: #f59e0b;
+}
+
+.scheme-title-container h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+.scheme-ministry {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.scheme-content {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.scheme-description {
+    margin: 0 0 1rem 0;
+    color: #4b5563;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.scheme-details {
+    margin-top: auto;
+}
+
+.scheme-detail-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.scheme-detail-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280;
+    min-width: 80px;
+}
+
+.scheme-detail-value {
+    font-size: 0.9rem;
+    color: #1f2937;
+}
+
+.scheme-actions {
+    padding: 1.25rem;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.scheme-btn {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s, color 0.2s;
+    flex: 1;
+}
+
+.scheme-btn.primary {
+    background-color: #10b981;
+    color: white;
+    border: none;
+}
+
+.scheme-btn.primary:hover {
+    background-color: #059669;
+}
+
+.scheme-btn.secondary {
+    background-color: #f9fafb;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+}
+
+.scheme-btn.secondary:hover {
+    background-color: #f3f4f6;
+}
+
+/* Eligibility Badge */
+.eligibility-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.eligibility-badge.eligible {
+    background-color: #dcfce7;
+    color: #10b981;
+}
+
+.eligibility-badge.ineligible {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Profile Update Modal */
+.profile-update-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.profile-update-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.profile-update-modal-content {
+    background-color: white;
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-update-modal-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-update-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1f2937;
+}
+
+.profile-update-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.profile-update-modal-body {
+    padding: 1.25rem;
+}
+
+.profile-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.profile-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-form-field label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.profile-form-field input,
+.profile-form-field select {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+}
+
+.profile-update-modal-footer {
+    padding: 1.25rem;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Eligibility Modal */
+.eligibility-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.eligibility-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.eligibility-modal-content {
+    background-color: white;
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.eligibility-modal-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.eligibility-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1f2937;
+}
+
+.eligibility-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.eligibility-modal-body {
+    padding: 1.25rem;
+}
+
+.eligibility-result {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.eligibility-result.eligible {
+    background-color: #dcfce7;
+}
+
+.eligibility-result.not-eligible {
+    background-color: #fee2e2;
+}
+
+.eligibility-icon {
+    font-size: 1.5rem;
+}
+
+.eligibility-message {
+    flex: 1;
+}
+
+.eligibility-message h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+}
+
+.eligibility-message p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.requirements-list {
+    margin: 1.5rem 0;
+}
+
+.requirements-list h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+.requirements-list ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.requirements-list li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.next-steps {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+}
+
+.next-steps h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+.next-steps p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.eligibility-modal-footer {
+    padding: 1.25rem;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Empty state */
+.schemes-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.schemes-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.schemes-empty h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: #4b5563;
+}
+
+.schemes-empty p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Loading state */
+.schemes-loading {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.schemes-loading .spinner {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    border: 0.25rem solid rgba(107, 114, 128, 0.3);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .schemes-filters {
+        flex-direction: column;
+    }
+    
+    .scheme-actions {
+        flex-direction: column;
+    }
+}

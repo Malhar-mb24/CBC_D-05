@@ -6,9 +6,14 @@
     <title>Dashboard - Kissan Sarthi</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard-styles.css">
-    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/market-analysis.css">
+    <link rel="stylesheet" href="css/schemes.css">
     <link rel="stylesheet" href="css/assistant.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/translate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -32,7 +37,6 @@
             <nav class="sidebar-nav">
                 <a href="#" class="sidebar-link active"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="#profile" class="sidebar-link"><i class="fas fa-user"></i> Profile</a>
-                <a href="#parameters" class="sidebar-link"><i class="fas fa-chart-bar"></i> Farming Parameters</a>
                 <a href="#schemes" class="sidebar-link"><i class="fas fa-file-alt"></i> Government Schemes</a>
                 <a href="#market" class="sidebar-link"><i class="fas fa-chart-line"></i> Market Analysis</a>
                 <a href="#kisan-sathi" class="sidebar-link"><i class="fas fa-comment"></i> Kisan Sathi</a>
@@ -96,70 +100,7 @@
                 </div>
             </section>
 
-            <!-- Farming Parameters Section -->
-            <section id="parameters" class="dashboard-card">
-                <div class="card-header parameters-header">
-                    <h2 class="card-title">Farming Parameters</h2>
-                </div>
-                <div class="card-content">
-                    <div class="tabs-container">
-                        <div class="tabs">
-                            <button class="tab-btn active" data-tab="crops">
-                                <i class="fas fa-seedling"></i> <span>Crop Types</span>
-                            </button>
-                            <button class="tab-btn" data-tab="land">
-                                <i class="fas fa-mountain"></i> <span>Land Type</span>
-                            </button>
-                            <button class="tab-btn" data-tab="irrigation">
-                                <i class="fas fa-tint"></i> <span>Irrigation Methods</span>
-                            </button>
-                            <button class="tab-btn" data-tab="soil">
-                                <i class="fas fa-layer-group"></i> <span>Soil Types</span>
-                            </button>
-                        </div>
-                        
-                        <div class="tab-content active" id="crops-content">
-                            <div class="tab-header">
-                                <h3>Crop Types</h3>
-                                <p>Distribution of crops across your farmland</p>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="cropChart"></canvas>
-                            </div>
-                        </div>
-                        
-                        <div class="tab-content" id="land-content">
-                            <div class="tab-header">
-                                <h3>Land Type</h3>
-                                <p>Distribution of land types in your farm</p>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="landChart"></canvas>
-                            </div>
-                        </div>
-                        
-                        <div class="tab-content" id="irrigation-content">
-                            <div class="tab-header">
-                                <h3>Irrigation Methods</h3>
-                                <p>Irrigation methods used across your farmland</p>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="irrigationChart"></canvas>
-                            </div>
-                        </div>
-                        
-                        <div class="tab-content" id="soil-content">
-                            <div class="tab-header">
-                                <h3>Soil Types</h3>
-                                <p>Distribution of soil types across your farmland</p>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="soilChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
 
             <!-- Government Schemes Section -->
             <section id="schemes" class="dashboard-card">
@@ -167,6 +108,47 @@
                     <h2 class="card-title">Government Schemes</h2>
                 </div>
                 <div class="card-content">
+                    <div class="farmer-eligibility-summary">
+                        <div class="farmer-profile-snapshot">
+                            <div class="profile-snapshot-header">
+                                <h3>Your Eligibility Profile</h3>
+                                <button id="update-profile-btn" class="scheme-btn secondary"><i class="fas fa-edit"></i> Update</button>
+                            </div>
+                            <div class="profile-snapshot-details">
+                                <div class="profile-snapshot-item">
+                                    <div class="snapshot-label">Location:</div>
+                                    <div class="snapshot-value" id="farmer-location">Amritsar, Punjab</div>
+                                </div>
+                                <div class="profile-snapshot-item">
+                                    <div class="snapshot-label">Land Size:</div>
+                                    <div class="snapshot-value" id="farmer-land-size">5 acres</div>
+                                </div>
+                                <div class="profile-snapshot-item">
+                                    <div class="snapshot-label">Primary Crop:</div>
+                                    <div class="snapshot-value" id="farmer-crop-type">Wheat</div>
+                                </div>
+                                <div class="profile-snapshot-item">
+                                    <div class="snapshot-label">Soil Type:</div>
+                                    <div class="snapshot-value" id="farmer-soil-type">Loamy</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="eligibility-stats">
+                            <div class="eligibility-stat-item">
+                                <div class="stat-number" id="eligible-schemes-count">0</div>
+                                <div class="stat-label">Eligible Schemes</div>
+                            </div>
+                            <div class="eligibility-stat-item">
+                                <div class="stat-number" id="pending-applications-count">0</div>
+                                <div class="stat-label">Pending Applications</div>
+                            </div>
+                            <div class="eligibility-stat-item">
+                                <div class="stat-number" id="active-schemes-count">0</div>
+                                <div class="stat-label">Active Schemes</div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="schemes-filters">
                         <div class="search-container">
                             <i class="fas fa-search search-icon"></i>
@@ -178,6 +160,10 @@
                                 <option value="subsidy">Subsidy</option>
                                 <option value="loan">Loan</option>
                                 <option value="insurance">Insurance</option>
+                            </select>
+                            <select id="eligibility-filter" class="filter-select">
+                                <option value="all">All Schemes</option>
+                                <option value="eligible">Eligible Only</option>
                             </select>
                         </div>
                     </div>
@@ -191,137 +177,75 @@
             <!-- Market Analysis Section -->
             <section id="market" class="dashboard-card">
                 <div class="card-header market-header">
-                    <h2 class="card-title">Market Analysis</h2>
+                    <h2 class="card-title">Market Price Analysis</h2>
                 </div>
                 <div class="card-content">
                     <div class="market-header-container">
                         <div class="market-title">
                             <h3><i class="fas fa-chart-line"></i> Crop Price Trends</h3>
-                            <p>Track market prices for your crops</p>
+                            <p>Track market prices for your selected crops</p>
                         </div>
-                        <div class="time-range-filter">
-                            <i class="fas fa-calendar"></i>
-                            <select id="time-range" class="time-range-select">
-                                <option value="month">Last Month</option>
-                                <option value="quarter">Last Quarter</option>
-                                <option value="year">Last Year</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="price-cards">
-                        <div class="price-card wheat-card">
-                            <div class="price-card-content">
-                                <div class="crop-name">Wheat</div>
-                                <div class="price-info">
-                                    <div class="current-price">₹2,350</div>
-                                    <div class="price-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>2.17%</span>
-                                    </div>
-                                </div>
+                        <div class="market-controls">
+                            <div class="crop-selector">
+                                <label for="crop-select">Select Crop:</label>
+                                <select id="crop-select" class="crop-select">
+                                    <!-- Options will be populated based on selected crops -->
+                                </select>
                             </div>
-                        </div>
-                        <div class="price-card rice-card">
-                            <div class="price-card-content">
-                                <div class="crop-name">Rice</div>
-                                <div class="price-info">
-                                    <div class="current-price">₹3,050</div>
-                                    <div class="price-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>1.67%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="price-card maize-card">
-                            <div class="price-card-content">
-                                <div class="crop-name">Maize</div>
-                                <div class="price-info">
-                                    <div class="current-price">₹2,150</div>
-                                    <div class="price-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>2.38%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="price-card pulses-card">
-                            <div class="price-card-content">
-                                <div class="crop-name">Pulses</div>
-                                <div class="price-info">
-                                    <div class="current-price">₹6,600</div>
-                                    <div class="price-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>1.54%</span>
-                                    </div>
-                                </div>
+                            <div class="time-range-filter">
+                                <i class="fas fa-calendar"></i>
+                                <select id="time-range" class="time-range-select">
+                                    <option value="month">Last Month</option>
+                                    <option value="quarter">Last Quarter</option>
+                                    <option value="year">Last Year</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="market-tabs-container">
-                        <div class="market-tabs">
-                            <button class="market-tab-btn active" data-crop="wheat">Wheat</button>
-                            <button class="market-tab-btn" data-crop="rice">Rice</button>
-                            <button class="market-tab-btn" data-crop="maize">Maize</button>
-                            <button class="market-tab-btn" data-crop="pulses">Pulses</button>
-                        </div>
-                        
-                        <div class="market-tab-content active" id="wheat-content">
-                            <div class="market-chart-header">
-                                <h3>Wheat Price Trend</h3>
-                                <div class="price-unit">Price per quintal (₹)</div>
-                            </div>
-                            <div class="market-chart-container">
-                                <canvas id="wheatChart"></canvas>
-                            </div>
-                            <div class="market-insights">
-                                <h4>Market Insights</h4>
-                                <p>Wheat prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
+                    <div class="market-price-summary">
+                        <div class="current-crop-info">
+                            <div class="crop-icon" id="selected-crop-icon">🌾</div>
+                            <div class="crop-details">
+                                <h3 id="selected-crop-name">Select a crop</h3>
+                                <div class="price-container">
+                                    <div class="current-price" id="selected-crop-price">₹0</div>
+                                    <div class="price-change" id="selected-crop-change">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>0.00%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="market-tab-content" id="rice-content">
-                            <div class="market-chart-header">
-                                <h3>Rice Price Trend</h3>
-                                <div class="price-unit">Price per quintal (₹)</div>
+                        <div class="price-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Highest Price (Year)</div>
+                                <div class="stat-value" id="highest-price">₹0</div>
                             </div>
-                            <div class="market-chart-container">
-                                <canvas id="riceChart"></canvas>
+                            <div class="stat-item">
+                                <div class="stat-label">Lowest Price (Year)</div>
+                                <div class="stat-value" id="lowest-price">₹0</div>
                             </div>
-                            <div class="market-insights">
-                                <h4>Market Insights</h4>
-                                <p>Rice prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="market-tab-content" id="maize-content">
-                            <div class="market-chart-header">
-                                <h3>Maize Price Trend</h3>
-                                <div class="price-unit">Price per quintal (₹)</div>
-                            </div>
-                            <div class="market-chart-container">
-                                <canvas id="maizeChart"></canvas>
-                            </div>
-                            <div class="market-insights">
-                                <h4>Market Insights</h4>
-                                <p>Maize prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
+                            <div class="stat-item">
+                                <div class="stat-label">Avg. Price (Year)</div>
+                                <div class="stat-value" id="avg-price">₹0</div>
                             </div>
                         </div>
-                        
-                        <div class="market-tab-content" id="pulses-content">
-                            <div class="market-chart-header">
-                                <h3>Pulses Price Trend</h3>
-                                <div class="price-unit">Price per quintal (₹)</div>
-                            </div>
-                            <div class="market-chart-container">
-                                <canvas id="pulsesChart"></canvas>
-                            </div>
-                            <div class="market-insights">
-                                <h4>Market Insights</h4>
-                                <p>Pulses prices have shown a steady increase over the past year. The current market trend indicates favorable conditions for selling in the upcoming months. Consider timing your sales to maximize profits.</p>
-                            </div>
+                    </div>
+                    
+                    <div class="market-chart-container">
+                        <canvas id="marketPriceChart"></canvas>
+                    </div>
+                    
+                    <div class="market-insights">
+                        <h4>Market Insights</h4>
+                        <p id="market-insight-text">Select a crop to view market insights.</p>
+                    </div>
+                    
+                    <div class="other-crops-prices">
+                        <h4>Your Other Crops</h4>
+                        <div class="price-cards" id="other-crops-container">
+                            <!-- Other crop cards will be dynamically inserted here -->
                         </div>
                     </div>
                 </div>
@@ -392,9 +316,11 @@
     <!-- Dashboard scripts -->
     <script src="js/dashboard-main.js"></script>
     <script src="js/dashboard-charts.js"></script>
-    <script src="js/dashboard-schemes.js"></script>
-    <script src="js/franc-min.js"></script>
-<script src="js/dashboard-assistant.js"></script>
+    <script src="js/dashboard-parameters.js"></script>
+    <script src="js/market-analysis.js"></script>
+    <script src="js/schemes-api.js"></script>
+    <script src="js/schemes.js"></script>
+    <script src="js/dashboard-assistant.js"></script>
     
     <!-- Gemini API integration -->
     <script src="js/gemini-api.js"></script>
