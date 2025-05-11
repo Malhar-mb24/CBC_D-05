@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Kissan Sarthi</title>
+    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard-styles.css">
     <link rel="stylesheet" href="css/dashboard.css">
@@ -11,21 +12,49 @@
     <link rel="stylesheet" href="css/market-analysis.css">
     <link rel="stylesheet" href="css/schemes.css">
     <link rel="stylesheet" href="css/assistant.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/farm-badges.css">
+    <link rel="stylesheet" href="css/document-upload.css">
+    <link rel="stylesheet" href="css/recommendations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="js/translate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/common-ui.js" defer></script>
 </head>
 <body>
-    <header class="site-header">
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="details.html">Details</a>
-            <a href="parameters.html">Parameters</a>
-            <a href="dashboard.html" class="active">Dashboard</a>
-            <a href="language.html">Language</a>
-        </nav>
-        <div id="google_translate_element"></div>
+    <header class="ks-header">
+        <div class="container">
+            <div class="ks-logo ks-animate-fadeIn">
+                <img src="images/logo.png" alt="Kisan Sathi Logo" onerror="this.src='https://via.placeholder.com/40x40/13a538/ffffff?text=KS'">
+                <h1>किसान सारथी</h1>
+            </div>
+            
+            <div class="ks-nav">
+                <button class="ks-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="ks-nav-links ks-animate-fadeInDown">
+                    <a href="index.html" class="ks-nav-link" id="nav-home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="details.html" class="ks-nav-link" id="nav-details">
+                        <i class="fas fa-user-edit"></i> Details
+                    </a>
+                    <a href="parameters.html" class="ks-nav-link" id="nav-parameters">
+                        <i class="fas fa-sliders-h"></i> Parameters
+                    </a>
+                    <a href="dashboard.html" class="ks-nav-link active" id="nav-dashboard">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </div>
+                
+                <div class="ks-language-switcher">
+                    <div id="google_translate_element"></div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="dashboard-container">
@@ -57,48 +86,133 @@
             <h1 class="dashboard-title">Farmer Dashboard</h1>
 
             <!-- Farmer Profile Section -->
-            <section id="profile" class="dashboard-card">
-                <div class="card-header profile-header">
-                    <h2 class="card-title">Farmer Profile</h2>
-                    <span class="farmer-id">ID: FARM123456</span>
-                </div>
-                <div class="card-content">
-                    <div class="profile-container">
-                        <div class="profile-image-container">
-                            <img src="assets/farmer-profile.jpg" alt="Rajesh Kumar" class="profile-image">
-                            <div class="profile-badges" id="profileBadges"></div>
+            <section id="profile" class="profile-section" id="profile-section">
+                <div class="profile-header">
+                    <div class="profile-image-container">
+                        <img src="images/default-profile.png" alt="Farmer Profile" class="profile-image" id="profile-image">
+                    </div>
+                    <div class="profile-info">
+                        <h2 class="profile-name" id="profile-name">Farmer Name</h2>
+                        <div class="profile-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="profile-location">Location Not Set</span>
                         </div>
-                        <div class="profile-details">
-                            <h3 class="farmer-name">Rajesh Kumar</h3>
-                            <div class="farmer-location">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Amritsar, Punjab</span>
+                        <div class="profile-badges">
+                            <div class="profile-badge">
+                                <i class="fas fa-seedling"></i>
+                                <span>Farmer</span>
                             </div>
-                            <div class="farmer-contact-info">
-                                <div class="contact-item">
-                                    <i class="fas fa-phone"></i>
-                                    <span>+91 98765 43210</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>rajesh.kumar@example.com</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>Experience: 15 years</span>
-                                </div>
-                            </div>
-                            <div class="farmer-certifications">
-                                <h4>Certifications</h4>
-                                <div class="certification-badges">
-                                    <span class="certification-badge">Organic Farming</span>
-                                    <span class="certification-badge">Sustainable Agriculture</span>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="profile-action-btn" id="update-profile-btn" title="Update Profile">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <h3 class="profile-section-title">
+                        <i class="fas fa-user"></i> Personal Information
+                    </h3>
+                    <div class="profile-grid" id="profile-details-grid">
+                        <!-- Profile details will be populated by JavaScript -->
+                    </div>
+                    
+                    <h3 class="profile-section-title" style="margin-top: 1.5rem;">
+                        <i class="fas fa-leaf"></i> Farm Health Badges
+                    </h3>
+                    <div class="dashboard-farm-badges" id="dashboard-farm-badges">
+                        <!-- Farm badges will be populated by JavaScript -->
+                    </div>
+                    
+                    <h3 class="profile-section-title" style="margin-top: 1.5rem;">
+                        <i class="fas fa-lightbulb"></i> Smart Recommendations
+                    </h3>
+                    <div class="farmer-recommendations" id="farmer-recommendations">
+                        <div class="recommendations-loading" id="recommendations-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Generating personalized recommendations...</span>
+                        </div>
+                        <div class="recommendations-content" id="recommendations-content" style="display: none;">
+                            <!-- Recommendations will be populated by JavaScript -->
+                        </div>
+                        <button id="refresh-recommendations" class="refresh-recommendations-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh Recommendations
+                        </button>
+                    </div>
+                    
+                    <div class="profile-complete-status">
+                        <div class="profile-section-title">
+                            <i class="fas fa-clipboard-check"></i> Profile Completion
+                        </div>
+                        <div class="profile-progress">
+                            <div class="profile-progress-bar" id="profile-progress-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="profile-complete-text">
+                            <span>Profile Completion</span>
+                            <span id="profile-completion-text">0%</span>
+                        </div>
+                        <div class="profile-missing-fields" id="profile-missing-fields">
+                            <!-- Missing fields will be populated by JavaScript -->
+                        </div>
+                        <div class="profile-update-cta">
+                            <button class="profile-update-btn" id="update-profile-btn-bottom">
+                                <i class="fas fa-edit"></i> Update Profile
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
+            
+            <!-- Profile Update Modal -->
+            <div class="profile-update-modal" id="profile-update-modal">
+                <div class="profile-update-modal-content">
+                    <div class="profile-update-modal-header">
+                        <h3>Update Profile</h3>
+                        <button class="profile-update-modal-close" id="profile-modal-close">&times;</button>
+                    </div>
+                    <div class="profile-update-modal-body">
+                        <form id="profile-update-form" class="profile-form">
+                            <div class="profile-form-field">
+                                <label for="profile-name-input">Full Name</label>
+                                <input type="text" id="profile-name-input" name="profile-name-input" placeholder="Your full name">
+                            </div>
+                            <div class="profile-form-field">
+                                <label for="profile-age-input">Age</label>
+                                <input type="number" id="profile-age-input" name="profile-age-input" placeholder="Your age">
+                            </div>
+                            <div class="profile-form-field">
+                                <label for="profile-district-input">District</label>
+                                <input type="text" id="profile-district-input" name="profile-district-input" placeholder="Your district">
+                            </div>
+                            <div class="profile-form-field">
+                                <label for="profile-mobile-input">Mobile Number</label>
+                                <input type="tel" id="profile-mobile-input" name="profile-mobile-input" placeholder="Your mobile number" pattern="[0-9]{10}" maxlength="10">
+                            </div>
+                            <div class="profile-form-field">
+                                <label for="profile-land-size-input">Land Size (acres)</label>
+                                <input type="number" id="profile-land-size-input" name="profile-land-size-input" placeholder="Land size in acres" step="0.01">
+                            </div>
+                            <div class="profile-form-field">
+                                <label for="profile-soil-type-select">Soil Type</label>
+                                <select id="profile-soil-type-select" name="profile-soil-type-select">
+                                    <option value="">Select soil type</option>
+                                    <option value="clay">Clay Soil</option>
+                                    <option value="sandy">Sandy Soil</option>
+                                    <option value="silt">Silt Soil</option>
+                                    <option value="loam">Loam Soil</option>
+                                    <option value="chalk">Chalk Soil</option>
+                                    <option value="peat">Peat Soil</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="profile-update-modal-footer">
+                        <button type="button" class="ks-btn-secondary" id="profile-modal-cancel">Cancel</button>
+                        <button type="submit" class="ks-btn-primary" form="profile-update-form">Save Changes</button>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -315,15 +429,18 @@
     
     <!-- Dashboard scripts -->
     <script src="js/dashboard-main.js"></script>
-    <script src="js/dashboard-charts.js"></script>
-    <script src="js/dashboard-parameters.js"></script>
+    <script src="js/dashboard.js"></script>
     <script src="js/market-analysis.js"></script>
     <script src="js/schemes-api.js"></script>
     <script src="js/schemes.js"></script>
-    <script src="js/dashboard-assistant.js"></script>
-    
+    <script src="js/dashboard-parameters.js"></script>
+    <script src="js/profile-direct.js"></script>
+    <script src="js/farm-badges.js"></script>
+    <script src="js/document-upload.js"></script>
     <!-- Gemini API integration -->
     <script src="js/gemini-api.js"></script>
-    <script src="js/gemini-assistant-integration.js"></script>
+    <script src="js/dashboard-assistant.js"></script>
+    <script src="js/farmer-recommendations.js"></script>
+    <script src="js/speech-recognition-handler.js"></script>
 </body>
 </html>

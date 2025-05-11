@@ -4,27 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm Parameters - Kissan Sarthi</title>
+    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/crop-selection.css">
+    <link rel="stylesheet" href="css/farm-badges.css">
+    <link rel="stylesheet" href="css/document-upload.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="js/translate.js"></script>
+    <script src="js/common-ui.js" defer></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="nav-brand">
+    <header class="ks-header">
+        <div class="container">
+            <div class="ks-logo ks-animate-fadeIn">
+                <img src="images/logo.png" alt="Kisan Sathi Logo" onerror="this.src='https://via.placeholder.com/40x40/13a538/ffffff?text=KS'">
                 <h1>किसान सारथी</h1>
             </div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="details.html">Details</a>
-                <a href="parameters.html" class="active">Parameters</a>
-                <a href="dashboard.html">Dashboard</a>
-
+            
+            <div class="ks-nav">
+                <button class="ks-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="ks-nav-links ks-animate-fadeInDown">
+                    <a href="index.html" class="ks-nav-link" id="nav-home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="details.html" class="ks-nav-link" id="nav-details">
+                        <i class="fas fa-user-edit"></i> Details
+                    </a>
+                    <a href="parameters.html" class="ks-nav-link active" id="nav-parameters">
+                        <i class="fas fa-sliders-h"></i> Parameters
+                    </a>
+                    <a href="dashboard.html" class="ks-nav-link" id="nav-dashboard">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </div>
+                
+                <div class="ks-language-switcher">
+                    <div id="google_translate_element"></div>
+                </div>
             </div>
-        </nav>
-        <div id="google_translate_element"></div>
+        </div>
     </header>
 
     <main>
@@ -303,6 +325,40 @@
                     </div>
                 </section>
 
+                <!-- Document Upload Section -->
+                <section id="document-upload-section" class="document-upload-section">
+                    <h2 class="document-upload-title">
+                        <i class="fas fa-file-medical-alt"></i> Lab Report Verification (Optional)
+                    </h2>
+                    <p class="document-upload-description">
+                        Upload your soil test reports, water quality analysis, or any other lab documents to verify your farm data. 
+                        Farmers with verified lab reports will receive a "Certified" badge on their profile.
+                    </p>
+                    
+                    <div id="document-upload-area" class="document-upload-area">
+                        <div class="document-upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="document-upload-text">
+                            Drag and drop files here or click to browse
+                        </div>
+                        <div class="document-upload-subtext">
+                            Supported formats: PDF, Word, JPEG, PNG (Max 5MB per file)
+                        </div>
+                        <input type="file" id="document-upload-input" class="document-upload-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    </div>
+                    
+                    <div id="document-preview-container" class="document-preview-container" style="display: none;">
+                        <!-- Document previews will be added here -->
+                    </div>
+                    
+                    <div class="document-upload-actions">
+                        <button type="button" id="document-clear-btn" class="document-upload-btn secondary" style="display: none;">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                </section>
+                
                 <div class="form-actions">
                     <button type="submit" class="btn">Save & View Dashboard</button>
                 </div>
@@ -494,5 +550,7 @@
         });
     </script>
     <script src="js/crop-selection.js"></script>
+    <script src="js/farm-badges.js"></script>
+    <script src="js/document-upload.js"></script>
 </body>
 </html> 

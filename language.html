@@ -109,6 +109,14 @@
             <h1>किसान सारथी</h1>
             <h2>Select Your Language</h2>
             <p>Choose your preferred language to continue</p>
+            <div id="auto-detect-container" style="margin-bottom: 20px;">
+                <button id="auto-detect-btn" class="btn" style="background-color: #3498db; margin-top: 10px;">
+                    <i class="fas fa-magic"></i> Auto-Detect Language
+                </button>
+                <p id="detecting-text" style="display: none; font-style: italic; color: #666; margin-top: 10px;">
+                    <i class="fas fa-spinner fa-spin"></i> Detecting your language...
+                </p>
+            </div>
             
             <div class="language-grid">
                 <button class="language-option" data-lang="en">
@@ -179,7 +187,60 @@
         document.addEventListener('DOMContentLoaded', () => {
             const languageOptions = document.querySelectorAll('.language-option');
             const continueBtn = document.getElementById('continue-btn');
+            const autoDetectBtn = document.getElementById('auto-detect-btn');
+            const detectingText = document.getElementById('detecting-text');
             let selectedLanguage = null;
+            
+            // Function to detect user's language
+            function detectUserLanguage() {
+                // Show detecting message
+                autoDetectBtn.style.display = 'none';
+                detectingText.style.display = 'block';
+                
+                // Get browser language
+                let browserLang = navigator.language || navigator.userLanguage;
+                browserLang = browserLang.split('-')[0]; // Get primary language code
+                
+                // Map of supported languages
+                const supportedLangs = ['en', 'hi', 'mr', 'gu', 'bn', 'ta', 'te', 'ml', 'kn', 'pa', 'ur'];
+                
+                // Check if browser language is supported
+                if (!supportedLangs.includes(browserLang)) {
+                    browserLang = 'en'; // Default to English if not supported
+                }
+                
+                // Simulate detection delay for better UX
+                setTimeout(() => {
+                    // Find and select the detected language option
+                    const detectedOption = document.querySelector(`[data-lang="${browserLang}"]`);
+                    if (detectedOption) {
+                        // Clear any existing selections
+                        languageOptions.forEach(opt => opt.classList.remove('selected'));
+                        
+                        // Select detected language
+                        detectedOption.classList.add('selected');
+                        selectedLanguage = browserLang;
+                        
+                        // Enable continue button
+                        continueBtn.disabled = false;
+                        
+                        // Scroll to the selected option
+                        detectedOption.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // Add a highlight animation
+                        detectedOption.style.animation = 'none';
+                        detectedOption.offsetHeight; // Trigger reflow
+                        detectedOption.style.animation = 'pulse 1s ease-in-out 2';
+                    }
+                    
+                    // Hide detecting message and show auto-detect button again
+                    detectingText.style.display = 'none';
+                    autoDetectBtn.style.display = 'inline-block';
+                }, 1500);
+            }
+            
+            // Add auto-detect button click handler
+            autoDetectBtn.addEventListener('click', detectUserLanguage);
 
             // Check if language was previously selected
             const savedLanguage = localStorage.getItem('selectedLanguage');
@@ -236,7 +297,35 @@
                     continueBtn.click();
                 }
             });
+            
+            // Add animation for pulse effect
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+                    50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+                    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                @keyframes slideOut {
+                    to { opacity: 0; transform: translateY(-20px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Auto-detect language on page load if no language was previously selected
+            if (!localStorage.getItem('selectedLanguage')) {
+                // Delay auto-detection slightly to ensure page is fully loaded
+                setTimeout(() => {
+                    autoDetectBtn.click();
+                }, 500);
+            }
         });
     </script>
 </body>
-</html> 
+</html>

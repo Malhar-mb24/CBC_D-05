@@ -1,0 +1,264 @@
+/* Document Upload Styles */
+
+.document-upload-section {
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border: 1px dashed #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.document-upload-section:hover {
+    border-color: #13a538;
+}
+
+.document-upload-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.document-upload-title i {
+    color: #13a538;
+}
+
+.document-upload-description {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.document-upload-area {
+    border: 2px dashed #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+    position: relative;
+}
+
+.document-upload-area:hover {
+    border-color: #13a538;
+    background-color: #f0fdf4;
+}
+
+.document-upload-area.dragover {
+    border-color: #13a538;
+    background-color: #f0fdf4;
+}
+
+.document-upload-icon {
+    font-size: 2.5rem;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.document-upload-area:hover .document-upload-icon {
+    color: #13a538;
+}
+
+.document-upload-text {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.document-upload-subtext {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.document-upload-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.document-preview-container {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.document-preview-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+    background-color: #f9fafb;
+    transition: all 0.3s ease;
+}
+
+.document-preview-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.document-preview-header {
+    padding: 0.75rem;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.document-preview-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.document-preview-remove {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.document-preview-remove:hover {
+    background-color: #fee2e2;
+}
+
+.document-preview-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+}
+
+.document-preview-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #6b7280;
+}
+
+.document-preview-info {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+.document-preview-size {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
+.document-upload-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.document-upload-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.document-upload-btn.primary {
+    background-color: #13a538;
+    color: white;
+    border: none;
+}
+
+.document-upload-btn.primary:hover {
+    background-color: #0d8229;
+}
+
+.document-upload-btn.secondary {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+}
+
+.document-upload-btn.secondary:hover {
+    background-color: #e5e7eb;
+}
+
+/* Certified Badge Styles */
+.certified-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, #13a538, #0d8229);
+    color: white;
+    font-weight: 500;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 4px rgba(19, 165, 56, 0.2);
+}
+
+.certified-badge i {
+    font-size: 1rem;
+}
+
+.profile-certified-badge {
+    background: linear-gradient(135deg, #13a538, #0d8229);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(19, 165, 56, 0.2);
+}
+
+.profile-certified-badge i {
+    font-size: 0.8rem;
+}
+
+/* Animation for the certified badge */
+@keyframes certifiedPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(19, 165, 56, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(19, 165, 56, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(19, 165, 56, 0);
+    }
+}
+
+.certified-badge {
+    animation: certifiedPulse 2s infinite;
+}

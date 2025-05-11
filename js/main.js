@@ -41,14 +41,12 @@ const translations = {
         save: "सहेजें",
         cancel: "रद्द करें",
         loading: "लोड हो रहा है...",
-        error: "त्रुटि",
-        success: "सफल"
     }
 };
 
 // API Configuration
 const API_KEYS = {
-    GEMINI: 'YOUR_GEMINI_API_KEY',
+    GEMINI: 'AIzaSyAYU3EdLwGORlH-HDJhRgasrbhOOnrVcis',
     GOOGLE_TRANSLATE: 'YOUR_GOOGLE_TRANSLATE_API_KEY',
     WEATHER: 'YOUR_WEATHER_API_KEY',
     AGRICULTURE: 'YOUR_AGRICULTURE_API_KEY',
@@ -57,7 +55,7 @@ const API_KEYS = {
 
 // API Endpoints
 const API_ENDPOINTS = {
-    GEMINI: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+    GEMINI: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
     WEATHER: 'https://api.openweathermap.org/data/2.5/weather',
     AGRICULTURE: 'https://api.agriculture.example.com/v1', // Replace with actual endpoint
     MAPS: 'https://maps.googleapis.com/maps/api/js'

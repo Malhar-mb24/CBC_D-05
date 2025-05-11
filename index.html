@@ -3,62 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kissan Sarthi - Smart Farming Solutions</title>
+    <title>Kisan Sathi - Your Smart Farming Companion</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/home-styles.css">
+    <link rel="stylesheet" href="css/modern-home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="js/translate.js"></script>
+    <script src="js/common-ui.js" defer></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="nav-brand">
+    <!-- Loading Animation -->    
+    <div class="loading-screen">
+        <div class="loading-logo">
+            <img src="images/logo.png" alt="Kisan Sathi Logo" onerror="this.src='https://via.placeholder.com/120x120/13a538/ffffff?text=KS'">
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+        <div class="loading-text">Loading... 0%</div>
+    </div>
+
+    <!-- Header -->    
+    <header class="ks-header">
+        <div class="container">
+            <div class="ks-logo ks-animate-fadeIn">
+                <img src="images/logo.png" alt="Kisan Sathi Logo" onerror="this.src='https://via.placeholder.com/40x40/13a538/ffffff?text=KS'">
                 <h1>किसान सारथी</h1>
             </div>
-            <div class="nav-links">
-                <a href="index.html" class="active">Home</a>
-                <a href="details.html">Details</a>
-                <a href="parameters.html">Parameters</a>
-                <a href="dashboard.html">Dashboard</a>
+            
+            <div class="ks-nav">
+                <button class="ks-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="ks-nav-links ks-animate-fadeInDown">
+                    <a href="index.html" class="ks-nav-link active" id="nav-home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="details.html" class="ks-nav-link" id="nav-details">
+                        <i class="fas fa-user-edit"></i> Details
+                    </a>
+                    <a href="parameters.html" class="ks-nav-link" id="nav-parameters">
+                        <i class="fas fa-sliders-h"></i> Parameters
+                    </a>
+                    <a href="dashboard.html" class="ks-nav-link" id="nav-dashboard">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </div>
+                
+                <div class="ks-language-switcher">
+                    <div id="google_translate_element"></div>
+                </div>
             </div>
-            <div class="language-switcher">
-                <div id="google_translate_element"></div>
-            </div>
-            </div>
-        </nav>
-
+        </div>
     </header>
 
     <main>
-        <section class="hero">
-            <h1>Welcome to Kissan Sarthi</h1>
-            <p>Your smart farming companion for better agricultural decisions</p>
+        <!-- 3D Hero Section with Chatbot -->        
+        <section class="hero-3d">
+            <div class="floating-element floating-1"></div>
+            <div class="floating-element floating-2"></div>
+            <div class="floating-element floating-3"></div>
+            
+            <div class="hero-content">
+                <div class="hero-text animate-on-scroll">
+                    <h1>Smart Farming Solutions for Indian Farmers</h1>
+                    <p>किसान सारथी - आपका डिजिटल कृषि सहायक, जो आधुनिक तकनीक के साथ आपकी खेती को बनाए उन्नत और लाभदायक</p>
+                    <div class="hero-cta">
+                        <a href="dashboard.html" class="ks-btn ks-btn-primary">
+                            <i class="fas fa-chart-line"></i> Go to Dashboard
+                        </a>
+                        <a href="#redirect-section" class="ks-btn ks-btn-secondary">
+                            <i class="fas fa-info-circle"></i> Explore Features
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="chatbot-container animate-on-scroll">
+                    <div class="chatbot-header">
+                        <div class="chatbot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="chatbot-title">
+                            <h3>Kisan AI Assistant</h3>
+                            <p>Ask me anything about farming</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chatbot-messages">
+                        <!-- Messages will be added dynamically -->
+                    </div>
+                    
+                    <div class="chatbot-input">
+                        <input type="text" placeholder="Type your question here..." aria-label="Chat message">
+                        <button type="button" aria-label="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
-
-        <section class="features">
-            <div class="feature-card">
-                <i class="fas fa-chart-line"></i>
-                <h2>Farmer Dashboard</h2>
-                <p>Monitor your farm's performance with real-time analytics</p>
-                <a href="dashboard.html" class="btn">View Dashboard</a>
+        
+        <!-- Redirect Cards Section -->        
+        <section id="redirect-section" class="redirect-section">
+            <div class="redirect-container">
+                <div class="section-header animate-on-scroll">
+                    <h2>Explore Kisan Sathi</h2>
+                    <p>Discover our powerful tools designed to transform your farming experience</p>
+                </div>
+                
+                <div class="redirect-cards">
+                    <div class="redirect-card animate-on-scroll">
+                        <div class="redirect-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Farmer Dashboard</h3>
+                        <p>Access real-time analytics, weather forecasts, and personalized recommendations to optimize your farm's performance.</p>
+                        <a href="dashboard.html" class="ks-btn ks-btn-primary">View Dashboard</a>
+                    </div>
+                    
+                    <div class="redirect-card animate-on-scroll">
+                        <div class="redirect-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <h3>Farm Parameters</h3>
+                        <p>Configure and optimize your farming parameters based on soil type, crop selection, and local conditions.</p>
+                        <a href="parameters.html" class="ks-btn ks-btn-primary">Set Parameters</a>
+                    </div>
+                    
+                    <div class="redirect-card animate-on-scroll">
+                        <div class="redirect-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <h3>Farmer Profile</h3>
+                        <p>Manage your profile and farm information to receive personalized advice and government scheme eligibility.</p>
+                        <a href="details.html" class="ks-btn ks-btn-primary">Update Details</a>
+                    </div>
+                </div>
             </div>
-            <div class="feature-card">
-                <i class="fas fa-sliders-h"></i>
-                <h2>Farm Parameters</h2>
-                <p>Configure and optimize your farming parameters</p>
-                <a href="parameters.html" class="btn">Set Parameters</a>
+        </section>
+        
+        <!-- Services Section -->        
+        <section class="services-section">
+            <div class="services-container">
+                <div class="section-header animate-on-scroll">
+                    <h2>Our Services</h2>
+                    <p>Comprehensive solutions to enhance your agricultural productivity</p>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://source.unsplash.com/random/600x400/?weather,farm" alt="Weather Forecasting" class="service-bg">
+                        <div class="service-icon">
+                            <i class="fas fa-cloud-sun-rain"></i>
+                        </div>
+                        <div class="service-content">
+                            <h3>Weather Forecasting</h3>
+                            <p>Access accurate weather predictions to plan your farming activities effectively.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://source.unsplash.com/random/600x400/?crops,agriculture" alt="Crop Advisory" class="service-bg">
+                        <div class="service-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="service-content">
+                            <h3>Crop Advisory</h3>
+                            <p>Get expert recommendations on crop selection, planting times, and cultivation techniques.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://source.unsplash.com/random/600x400/?market,farm" alt="Market Prices" class="service-bg">
+                        <div class="service-icon">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="service-content">
+                            <h3>Market Prices</h3>
+                            <p>Stay updated with current market prices to sell your produce at the best rates.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://source.unsplash.com/random/600x400/?government,document" alt="Government Schemes" class="service-bg">
+                        <div class="service-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="service-content">
+                            <h3>Government Schemes</h3>
+                            <p>Discover agricultural schemes and subsidies you're eligible for.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="feature-card">
-                <i class="fas fa-user-circle"></i>
-                <h2>Farmer Details</h2>
-                <p>Manage your profile and farm information</p>
-                <a href="details.html" class="btn">Update Details</a>
+        </section>
+        
+        <!-- Testimonials Section -->        
+        <section class="testimonials-section">
+            <div class="testimonials-container">
+                <div class="section-header animate-on-scroll">
+                    <h2>Farmer Success Stories</h2>
+                    <p>Hear from farmers who have transformed their agriculture with Kisan Sathi</p>
+                </div>
+                
+                <div class="testimonials-slider">
+                    <div class="testimonials-track">
+                        <div class="testimonial-card">
+                            <div class="testimonial-quote">“</div>
+                            <div class="testimonial-content">
+                                Kisan Sathi has revolutionized my farming approach. The weather forecasts and crop recommendations have helped me increase my yield by 30% this season.
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rajesh Kumar">
+                                </div>
+                                <div class="testimonial-info">
+                                    <h4>Rajesh Kumar</h4>
+                                    <p>Wheat Farmer, Punjab</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-quote">“</div>
+                            <div class="testimonial-content">
+                                The government scheme notifications helped me secure a subsidy for my irrigation system. The multilingual support makes it easy to use in my native language.
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Lakshmi Devi">
+                                </div>
+                                <div class="testimonial-info">
+                                    <h4>Lakshmi Devi</h4>
+                                    <p>Rice Farmer, Tamil Nadu</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-quote">“</div>
+                            <div class="testimonial-content">
+                                The AI assistant answers all my farming questions instantly. It's like having an agricultural expert available 24/7. This app has truly been a game-changer.
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">
+                                    <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Mohan Singh">
+                                </div>
+                                <div class="testimonial-info">
+                                    <h4>Mohan Singh</h4>
+                                    <p>Vegetable Farmer, Haryana</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-controls">
+                        <button class="slider-arrow slider-prev" aria-label="Previous testimonial">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="slider-arrow slider-next" aria-label="Next testimonial">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="slider-dots">
+                        <span class="slider-dot active"></span>
+                        <span class="slider-dot"></span>
+                        <span class="slider-dot"></span>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Kissan Sarthi. All rights reserved.</p>
+    <footer class="ks-footer">
+        <div class="container">
+            <div class="ks-footer-content">
+                <div class="ks-footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="details.html">Farmer Details</a>
+                    <a href="parameters.html">Farm Parameters</a>
+                    <a href="dashboard.html">Dashboard</a>
+                </div>
+                <div class="ks-social-icons">
+                    <a href="#" class="ks-social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="ks-social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="ks-social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="ks-social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="ks-footer-bottom">
+                <p>&copy; 2024 Kisan Sathi. All rights reserved. Developed with ❤️ for Indian Farmers.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -129,5 +391,8 @@
             });
         });
     </script>
+    
+    <!-- Modern Homepage Scripts -->
+    <script src="js/modern-home.js"></script>
 </body>
 </html> 

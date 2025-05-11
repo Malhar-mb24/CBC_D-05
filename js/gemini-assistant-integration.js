@@ -17,8 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    // Set the API key directly
-    const apiKey = 'AIzaSyBEg9OLwU5wkVd-wZo0su5DVVGWNtXkyqo';
+    // Get the API key from main.js or use the one from localStorage
+    let apiKey = '';
+    
+    // Try to get the API key from the global API_KEYS object first
+    if (window.API_KEYS && window.API_KEYS.GEMINI) {
+        apiKey = window.API_KEYS.GEMINI;
+        console.log('Using API key from global API_KEYS object');
+    } else {
+        // Fallback to localStorage
+        apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyByXYQL2vksV3IP6bdfdshYcksV1h6EEd4';
+        console.log('Using API key from localStorage or default');
+    }
     
     try {
         // Initialize Gemini API

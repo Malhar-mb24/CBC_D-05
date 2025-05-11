@@ -5,9 +5,9 @@
 
 class GeminiAPI {
     constructor(apiKey) {
-        this.apiKey = apiKey;
+        this.apiKey = apiKey || 'AIzaSyAYU3EdLwGORlH-HDJhRgasrbhOOnrVcis';
         this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models';
-        this.model = 'gemini-2.0-flash'; // Updated default model
+        this.model = 'gemini-2.0-flash'; // Using the model specified in the API example
         this.initialized = false;
         
         if (!this.apiKey) {

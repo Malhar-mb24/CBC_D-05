@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <script src="js/translate.js"></script>
     <title>Farmer Details - Krishi Saathi</title>
+    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="js/gtranslate.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/translate.js"></script>
+    <script src="js/common-ui.js" defer></script>
     <style>
         :root {
             --primary: #13a538;
@@ -741,17 +743,36 @@
     </style>
 </head>
 <body>
-    <header>
+    <header class="ks-header">
         <div class="container">
-            <div class="logo">
-                <a href="index.html">Home</a>
-                <a href="details.html" class="active">Details</a>
-                <a href="parameters.html">Parameters</a>
-                <a href="dashboard.html">Dashboard</a>
-                <div id="google_translate_element" class="gtranslate-toggle"></div>
+            <div class="ks-logo ks-animate-fadeIn">
+                <img src="images/logo.png" alt="Kisan Sathi Logo" onerror="this.src='https://via.placeholder.com/40x40/13a538/ffffff?text=KS'">
+                <h1>किसान सारथी</h1>
             </div>
-            <div class="language-selector">
-                <div id="google_translate_element"></div>
+            
+            <div class="ks-nav">
+                <button class="ks-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="ks-nav-links ks-animate-fadeInDown">
+                    <a href="index.html" class="ks-nav-link" id="nav-home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="details.html" class="ks-nav-link active" id="nav-details">
+                        <i class="fas fa-user-edit"></i> Details
+                    </a>
+                    <a href="parameters.html" class="ks-nav-link" id="nav-parameters">
+                        <i class="fas fa-sliders-h"></i> Parameters
+                    </a>
+                    <a href="dashboard.html" class="ks-nav-link" id="nav-dashboard">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </div>
+                
+                <div class="ks-language-switcher">
+                    <div id="google_translate_element"></div>
+                </div>
             </div>
         </div>
     </header>
@@ -962,8 +983,10 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="js/details-profile-sync.js"></script>
+    <script src="js/speech-recognition-handler.js"></script>
     <script>
-        (function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // --- Animated floating labels ---
             document.querySelectorAll('.ks-input').forEach(function(input) {
                 input.addEventListener('input', function() {
@@ -974,133 +997,7 @@
                 if (input.value) input.classList.add('filled');
             });
 
-            // --- Enhanced Voice Recognition ---
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            let recognition;
-            let currentInput;
-            let activeButton;
-            const langCodes = { 
-                en: 'en-IN', 
-                hi: 'hi-IN', 
-                mr: 'mr-IN',
-                gu: 'gu-IN', 
-                bn: 'bn-IN', 
-                ta: 'ta-IN', 
-                te: 'te-IN', 
-                ml: 'ml-IN'
-            };
-            let selectedLang = 'en'; // Default
-
-            // Set up recognition with high accuracy
-            function setupRecognition() {
-                if (!SpeechRecognition) {
-                    alert('Your browser does not support Speech Recognition. Please use Chrome or Edge.');
-                    return null;
-                }
-                
-                const instance = new SpeechRecognition();
-                instance.continuous = false;
-                instance.interimResults = true;
-                instance.maxAlternatives = 3;
-                instance.lang = langCodes[selectedLang] || 'en-IN';
-                
-                return instance;
-            }
-
-            function updateTranscript(inputId, text, final = false) {
-                const transcriptEl = document.getElementById('transcript-' + inputId);
-                if (!transcriptEl) return;
-                
-                transcriptEl.textContent = text ? 
-                    (final ? '✓ ' : '🎙 ') + text : '';
-                    
-                if (final) {
-                    transcriptEl.style.color = 'var(--success)';
-                    setTimeout(() => {
-                        transcriptEl.style.color = 'var(--text-light)';
-                    }, 2000);
-                }
-            }
-
-            function startListening(inputId) {
-                // Reset any active listening session
-                if (recognition) {
-                    recognition.abort();
-                }
-                
-                recognition = setupRecognition();
-                if (!recognition) return;
-                
-                // Reset all mic buttons
-                document.querySelectorAll('.ks-mic-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // Set current input and activate button
-                currentInput = document.getElementById(inputId);
-                activeButton = document.querySelector(`.ks-mic-btn[data-input="${inputId}"]`);
-                if (activeButton) activeButton.classList.add('active');
-                
-                // Show user we're listening
-                updateTranscript(inputId, 'Listening...', false);
-                
-                let finalTranscript = '';
-                let interimTranscript = '';
-
-                recognition.onresult = (event) => {
-                    interimTranscript = '';
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) {
-                            finalTranscript = event.results[i][0].transcript;
-                        } else {
-                            interimTranscript += event.results[i][0].transcript;
-                        }
-                    }
-                    
-                    // Update the transcript in real-time
-                    updateTranscript(inputId, finalTranscript || interimTranscript, false);
-                };
-
-                recognition.onerror = (event) => {
-                    console.error('Speech recognition error', event.error);
-                    updateTranscript(inputId, 'Error: ' + event.error, true);
-                    if (activeButton) activeButton.classList.remove('active');
-                };
-
-                recognition.onend = () => {
-                    let transcript = finalTranscript || interimTranscript;
-                    if (transcript) {
-                        // Format numbers correctly for mobile and aadhar fields
-                        if (inputId === 'mobile' || inputId === 'aadhar') {
-                            transcript = transcript.replace(/\D/g, '');
-                        }
-                        
-                        // Update the input field
-                        if (currentInput) {
-                            currentInput.value = transcript;
-                            currentInput.classList.add('filled');
-                            // Trigger input event for validation
-                            currentInput.dispatchEvent(new Event('input'));
-                        }
-                        
-                        updateTranscript(inputId, transcript, true);
-                    } else {
-                        updateTranscript(inputId, '', true);
-                    }
-                    
-                    if (activeButton) activeButton.classList.remove('active');
-                };
-
-                recognition.start();
-            }
-
-            // Set up all mic buttons
-            document.querySelectorAll('.ks-mic-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const inputId = btn.getAttribute('data-input');
-                    if (inputId) startListening(inputId);
-                });
-            });
+            // Speech recognition is now handled by speech-recognition-handler.js
 
             // --- OTP System ---
             let otpType = '';
