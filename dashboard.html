@@ -303,6 +303,38 @@
             </section>
 
             <!-- Market Analysis Section -->
+
+<!-- CEDA Agri-Market Dashboard Section -->
+<section class="dashboard-card" style="margin-top:32px;">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-chart-area"></i> CEDA Agri-Market Dashboard</h2>
+  </div>
+  <div class="card-content">
+    <style>
+      .ceda-frame-wrap{
+        position:relative;
+        width:100%;
+        padding-top:65vh;
+        margin-bottom:0;
+      }
+      .ceda-frame-wrap iframe{
+        position:absolute; top:0; left:0;
+        width:100%; height:100%;
+        border:0; overflow:hidden;
+        background:#fff;
+        border-radius:12px;
+        box-shadow:0 2px 12px rgba(0,0,0,0.07);
+      }
+    </style>
+    <div class="ceda-frame-wrap">
+      <iframe 
+        src="https://agmarknet.ceda.ashoka.edu.in" 
+        title="CEDA Agri-Market Dashboard" 
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+</section>
             <section id="market" class="dashboard-card">
                 <div class="card-header market-header">
                     <h2 class="card-title">Market Price Analysis</h2>
@@ -386,8 +418,10 @@
                 </div>
                 <div class="card-content assistant-content">
                     <div class="chat-container">
-                        <div class="chat-messages" id="chat-messages">
+                        <div id="agent-notification" style="display:none; background:#ffe082; color:#333; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:1em;"></div>
+<div class="chat-messages" id="chat-messages">
                             <div class="message assistant-message">
+    <button class="read-aloud-btn" title="Read Aloud" style="float:right; background:none; border:none; cursor:pointer; color:#4CAF50; font-size:1.2em; margin-left:8px;">🔊</button>
                                 <div class="message-avatar">
                                     <i class="fas fa-robot"></i>
                                 </div>
@@ -398,7 +432,15 @@
                             <!-- More messages will be added by JavaScript -->
                         </div>
                         
-                        <div class="chat-input-container">
+                        <div id="agent-suggestions" style="margin:10px 0 16px 0; padding:10px; background:#f0f4c3; border-radius:8px; display:none;"></div>
+<div id="agent-file-upload" style="margin-bottom:12px;">
+  <input type="file" id="agent-file-input" style="display:none;" />
+  <button id="agent-upload-btn" style="padding:6px 16px; background:#2196F3; color:#fff; border:none; border-radius:6px; cursor:pointer;">Upload File</button>
+  <span id="agent-file-name" style="margin-left:10px; font-size:0.97em; color:#333;"></span>
+  <button id="agent-summarize-btn" style="display:none; margin-left:10px; padding:6px 14px; background:#4CAF50; color:#fff; border:none; border-radius:6px; cursor:pointer;">Summarize</button>
+</div>
+<div id="agent-reminders" style="display:none; background:#ffe0b2; color:#333; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:1em;"></div>
+<div class="chat-input-container">
                             <div class="chat-controls">
                                 <button id="voice-btn" class="control-btn">
                                     <i class="fas fa-microphone"></i>

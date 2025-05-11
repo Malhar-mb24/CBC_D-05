@@ -35,12 +35,158 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize assistant elements if they exist
     if (!messageInput || !sendBtn || !chatMessages) {
         console.log('Assistant elements not found on this page. Skipping initialization.');
-        return; // Exit if elements don't exist
+        return; // --- AGENTIC AI FEATURES ---
+
+// Context memory for last 3 user queries
+let agentContextMemory = [];
+
+function addToAgentMemory(query) {
+  agentContextMemory.push(query);
+  if (agentContextMemory.length > 3) agentContextMemory.shift();
+}
+
+// Agent suggestions logic
+function showAgentSuggestions(suggestions) {
+  const sugDiv = document.getElementById('agent-suggestions');
+  if (!sugDiv) return;
+  if (!suggestions || suggestions.length === 0) {
+    sugDiv.style.display = 'none';
+    sugDiv.innerHTML = '';
+    return;
+  }
+  sugDiv.innerHTML = '<strong>Agent Suggestions:</strong> ' + suggestions.map(s => `<button class="agent-suggestion-btn" style="margin:0 8px 8px 0; padding:6px 14px; background:#4CAF50; color:#fff; border:none; border-radius:6px; cursor:pointer;">${s.label}</button>`).join(' ');
+  sugDiv.style.display = 'block';
+  Array.from(document.getElementsByClassName('agent-suggestion-btn')).forEach((btn, i) => {
+    btn.onclick = suggestions[i].onClick;
+  });
+}
+
+// Example agentic actions
+function agentGetWeather() {
+  agentNotify('Fetching weather for your farm...');
+  // Simulate async fetch
+  setTimeout(() => {
+    agentNotify('Weather: 🌦️ 28°C, Rain expected tomorrow.');
+    addAgentMessage('Weather: 🌦️ 28°C, Rain expected tomorrow. Consider covering your crops.');
+  }, 1200);
+}
+function agentGenerateQR() {
+  agentNotify('Generating QR code...');
+  setTimeout(() => {
+    agentNotify('QR code generated. See Dashboard section.');
+    addAgentMessage('QR code generated. Please check the Dashboard section.');
+  }, 900);
+}
+function agentUpdateProfile() {
+  agentNotify('Opening profile update modal...');
+  setTimeout(() => {
+    agentNotify('Profile update modal opened.');
+    // Simulate UI action
+    let modal = document.getElementById('profile-update-modal');
+    if(modal) modal.style.display = 'block';
+  }, 700);
+}
+
+// Proactive notification
+function agentNotify(msg) {
+  const n = document.getElementById('agent-notification');
+  if (!n) return;
+  n.textContent = msg;
+  n.style.display = 'block';
+  setTimeout(() => { n.style.display = 'none'; }, 5000);
+}
+
+// Read aloud functionality
+function setupReadAloud() {
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('read-aloud-btn')) {
+      const msg = e.target.closest('.assistant-message').querySelector('.message-content').textContent;
+      const utter = new SpeechSynthesisUtterance(msg);
+      utter.lang = 'en-IN';
+      window.speechSynthesis.speak(utter);
     }
-    
-    // Add system message to indicate successful initialization
-    if (chatMessages.children.length === 1) {
-        const systemMsg = document.createElement('div');
+  });
+}
+setupReadAloud();
+
+// Suggestion logic based on context
+function agentSuggestActions() {
+  const last = agentContextMemory[agentContextMemory.length-1] || '';
+  let suggestions = [
+    {label: 'Get Weather', onClick: agentGetWeather},
+    {label: 'Generate QR', onClick: agentGenerateQR},
+    {label: 'Update Profile', onClick: agentUpdateProfile}
+  ];
+  // Example: suggest only weather if user asked about weather
+  if (/weather|rain|temperature/i.test(last)) {
+    suggestions = [suggestions[0]];
+  }
+  showAgentSuggestions(suggestions);
+}
+
+// --- AGENTIC FILE UPLOAD & REMINDERS ---
+
+// File upload logic
+function setupAgentFileUpload() {
+  const uploadBtn = document.getElementById('agent-upload-btn');
+  const fileInput = document.getElementById('agent-file-input');
+  const fileNameSpan = document.getElementById('agent-file-name');
+  const summarizeBtn = document.getElementById('agent-summarize-btn');
+  if (!uploadBtn || !fileInput || !fileNameSpan || !summarizeBtn) return;
+  uploadBtn.onclick = function() { fileInput.click(); };
+  fileInput.onchange = function() {
+    if (fileInput.files && fileInput.files.length > 0) {
+      fileNameSpan.textContent = fileInput.files[0].name;
+      summarizeBtn.style.display = 'inline-block';
+    } else {
+      fileNameSpan.textContent = '';
+      summarizeBtn.style.display = 'none';
+    }
+  };
+  summarizeBtn.onclick = function() {
+    if (fileInput.files && fileInput.files.length > 0) {
+      agentNotify('Summarizing file...');
+      setTimeout(() => {
+        addAgentMessage('Summary of "' + fileInput.files[0].name + '":\nThis is a simulated summary. (Integrate real AI summarization for production).');
+        summarizeBtn.style.display = 'none';
+        fileNameSpan.textContent = '';
+        fileInput.value = '';
+      }, 1200);
+    }
+  };
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupAgentFileUpload);
+} else {
+  setupAgentFileUpload();
+}
+// Optionally, re-run setupAgentFileUpload after navigation or modal open if agent-file-upload is dynamically re-rendered.
+
+// Agentic reminders logic
+function agentShowReminder(msg) {
+  const r = document.getElementById('agent-reminders');
+  if (!r) return;
+  r.textContent = msg;
+  r.style.display = 'block';
+  setTimeout(() => { r.style.display = 'none'; }, 8000);
+}
+// Example: agentShowReminder('Don\'t forget to irrigate your crops today!');
+
+// --- END AGENTIC AI FEATURES ---
+
+// Existing chatbot logic (do not remove)
+
+// Hook into user message send event (assuming function sendMessage exists)
+const origSendMessage = window.sendMessage;
+window.sendMessage = function() {
+  const input = document.getElementById('message-input');
+  if(input && input.value) addToAgentMemory(input.value);
+  agentSuggestActions();
+  if(origSendMessage) origSendMessage.apply(this, arguments);
+};
+
+document.addEventListener('DOMContentLoaded', agentSuggestActions);
+
         systemMsg.className = 'message system-message';
         systemMsg.innerHTML = `
             <div class="message-avatar">
