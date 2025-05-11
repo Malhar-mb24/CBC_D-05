@@ -1,13 +1,12 @@
 // Selection Functionality - Optimized Version
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('[Kisan Sathi] DOMContentLoaded');
     // Initialize all selection grids
     initCropSelection();
     initSelectionGrids();
     initNumberInputs();
-    
     // Load saved parameters if they exist
     loadSavedParameters();
-    
     // Setup form submission to save all parameters
     setupFormSubmission();
 });

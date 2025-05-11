@@ -26,7 +26,7 @@
     <header class="ks-header">
         <div class="container">
             <div class="ks-logo ks-animate-fadeIn">
-                <img src="images/logo.png" alt="Kisan Sathi Logo" onerror="this.src='https://via.placeholder.com/40x40/13a538/ffffff?text=KS'">
+                <img src="https://static.vecteezy.com/system/resources/previews/033/347/900/non_2x/cute-adorable-farmer-boy-isolated-transparent-watercolor-illustration-free-png.png" alt="Kisan Sathi Farmer Logo" onerror="this.src='https://via.placeholder.com/40x40/13a538/ffffff?text=KS'">
                 <h1>किसान सारथी</h1>
             </div>
             
@@ -83,7 +83,19 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <h1 class="dashboard-title">Farmer Dashboard</h1>
+    <h1 class="dashboard-title">Farmer Dashboard</h1>
+    <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var qrBtn = document.getElementById('generate-qr-btn');
+    var qrContainer = document.getElementById('qr-embed-container');
+    if (qrBtn && qrContainer) {
+      qrBtn.addEventListener('click', function() {
+        qrContainer.innerHTML = `<a href='https://me-qr.com' border='0' style='cursor:pointer;display:block'><img src='https://storage2.me-qr.com/qr/204024293.png' alt='Create qr code for free'></a><a href='https://me-qr.com' border='0' style='cursor:default;display:none'>Create qr code for free</a>`;
+        qrContainer.style.display = 'block';
+      });
+    }
+  });
+</script>
 
             <!-- Farmer Profile Section -->
             <section id="profile" class="profile-section" id="profile-section">
@@ -104,11 +116,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="profile-actions">
-                        <button class="profile-action-btn" id="update-profile-btn" title="Update Profile">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </div>
+                    <div class="profile-actions" style="display: flex; gap: 10px; align-items: center;">
+    <button id="generate-qr-btn" style="padding: 8px 18px; background: #4CAF50; color: #fff; border: none; border-radius: 8px; font-size: 1em; cursor: pointer;">Generate QR</button>
+    <button class="profile-action-btn" id="update-profile-btn" title="Update Profile">
+        <i class="fas fa-edit"></i>
+    </button>
+</div>
+<div id="qr-embed-container" style="margin-top: 10px; display: none;"></div>
                 </div>
                 <div class="profile-details">
                     <h3 class="profile-section-title">
