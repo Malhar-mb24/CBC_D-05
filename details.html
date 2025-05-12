@@ -923,6 +923,15 @@
                         </div>
                     </div>
                     
+                    <!-- Climate Insights Section -->
+                    <div class="climate-insights-section dashboard-card" style="margin-top:24px;">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-globe-asia"></i> Climate Insights</h3>
+                        </div>
+                        <div class="card-content" id="climateInsightsContent">
+                            <div class="loading-insights">Loading climate insights for your location...</div>
+                        </div>
+                    </div>
                     <div class="forecast-container">
                         <h3>5-Day Weather Forecast</h3>
                         <div class="forecast-days" id="forecastDays">
@@ -985,6 +994,69 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="js/details-profile-sync.js"></script>
     <script src="js/speech-recognition-handler.js"></script>
+    <script>
+    // Helper to update insights UI
+    function showClimateInsightsUI({ temp, rain, period, error }) {
+      const el = document.getElementById('climateInsightsContent');
+      if (!el) return;
+      if (error) {
+        el.innerHTML = `<div class='insights-error' style="color:#c0392b; padding:16px;">${error}</div>`;
+        return;
+      }
+      el.innerHTML = `
+        <div class="climate-summary" style="margin-bottom:14px;font-size:1.07em;">
+          <span style="font-weight:500;">Historical Climate (1991–2020):</span>
+          <br>Average annual temperature and rainfall for your area.
+        </div>
+        <div class="climate-stats-row" style="display:flex;gap:24px;flex-wrap:wrap;justify-content:flex-start;">
+          <div class="climate-stat-card" style="background:#f5faf7;border-radius:10px;box-shadow:0 1px 6px #0001;padding:18px 26px 16px 18px;min-width:160px;flex:1;">
+            <div style="font-size:2.1em;color:#13a538;font-weight:600;">${temp !== null ? temp + '°C' : '--'}</div>
+            <div style="color:#555;">Mean Annual Temp</div>
+          </div>
+          <div class="climate-stat-card" style="background:#f5faf7;border-radius:10px;box-shadow:0 1px 6px #0001;padding:18px 26px 16px 18px;min-width:160px;flex:1;">
+            <div style="font-size:2.1em;color:#3498db;font-weight:600;">${rain !== null ? rain + ' mm' : '--'}</div>
+            <div style="color:#555;">Mean Annual Rainfall</div>
+          </div>
+        </div>
+        <div style="font-size:0.98em;color:#888;margin-top:10px;">Period: ${period}</div>
+      `;
+    }
+    // Fetch climate data from Open-Meteo API
+    function fetchClimateInsights(lat, lon) {
+      const el = document.getElementById('climateInsightsContent');
+      if (el) el.innerHTML = '<div class="loading-insights">Loading climate insights for your location...</div>';
+      const url = `https://climate-api.open-meteo.com/v1/climate?latitude=${lat}&longitude=${lon}&start_date=1991-01-01&end_date=2020-12-31&models=MPI_ESM1_2_XR&daily=temperature_2m_mean,precipitation_sum`;
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          // Calculate mean annual temp and rainfall
+          let temps = data.daily && data.daily.temperature_2m_mean ? data.daily.temperature_2m_mean : [];
+          let rains = data.daily && data.daily.precipitation_sum ? data.daily.precipitation_sum : [];
+          let temp = temps.length ? (temps.reduce((a,b)=>a+b,0)/temps.length).toFixed(1) : null;
+          let rain = rains.length ? (rains.reduce((a,b)=>a+b,0)/rains.length*365).toFixed(0) : null;
+          showClimateInsightsUI({ temp, rain, period: '1991–2020', error: null });
+        })
+        .catch(() => {
+          showClimateInsightsUI({ temp: null, rain: null, period: '1991–2020', error: 'Unable to fetch climate data.' });
+        });
+    }
+    // Wait until weather/map is loaded and coordinates are available
+    window.addEventListener('DOMContentLoaded', function() {
+      const latEl = document.getElementById('latitude');
+      const lonEl = document.getElementById('longitude');
+      if (!latEl || !lonEl) return;
+      function tryFetch() {
+        let lat = parseFloat(latEl.textContent);
+        let lon = parseFloat(lonEl.textContent);
+        if (isNaN(lat) || isNaN(lon) || latEl.textContent === '-') {
+          setTimeout(tryFetch, 2000);
+        } else {
+          fetchClimateInsights(lat, lon);
+        }
+      }
+      tryFetch();
+    });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // --- Animated floating labels ---
